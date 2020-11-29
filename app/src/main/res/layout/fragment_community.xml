@@ -1,0 +1,38 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.proyect.yapp_alpha_00.Fragment.CommunityFragment">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/bar">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="350dp"
+            android:id="@+id/recycler_view"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/recycler_view"
+            android:id="@+id/recycler_view_pila"/>
+
+        <ImageView
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:id="@+id/btn_upload"
+            android:src="@drawable/ic_upload"
+            android:background="@drawable/button_background"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="20dp"
+            android:layout_alignParentBottom="true"
+            android:padding="20dp"
+            android:layout_marginBottom="20dp"/>
+
+
+    </RelativeLayout>
+
+</RelativeLayout>

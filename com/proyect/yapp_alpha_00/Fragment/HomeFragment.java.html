@@ -1,0 +1,129 @@
+<html>
+<head>
+<title>HomeFragment.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cc7832;}
+.s1 { color: #a9b7c6;}
+.s2 { color: #6a8759;}
+</style>
+</head>
+<body bgcolor="#2b2b2b">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+HomeFragment.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">com.proyect.yapp_alpha_00.Fragment</span><span class="s0">;</span>
+
+<span class="s0">import </span><span class="s1">android.os.Bundle</span><span class="s0">;</span>
+
+<span class="s0">import </span><span class="s1">androidx.annotation.NonNull</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">androidx.fragment.app.Fragment</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">androidx.recyclerview.widget.LinearLayoutManager</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">androidx.recyclerview.widget.RecyclerView</span><span class="s0">;</span>
+
+<span class="s0">import </span><span class="s1">android.util.Log</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">android.view.LayoutInflater</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">android.view.View</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">android.view.ViewGroup</span><span class="s0">;</span>
+
+<span class="s0">import </span><span class="s1">com.google.firebase.auth.FirebaseAuth</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">com.google.firebase.database.DataSnapshot</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">com.google.firebase.database.DatabaseError</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">com.google.firebase.database.DatabaseReference</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">com.google.firebase.database.FirebaseDatabase</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">com.google.firebase.database.ValueEventListener</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">com.proyect.yapp_alpha_00.Adapters.PostAdapter</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">com.proyect.yapp_alpha_00.Model.Post</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">com.proyect.yapp_alpha_00.R</span><span class="s0">;</span>
+
+<span class="s0">import </span><span class="s1">java.util.ArrayList</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">java.util.List</span><span class="s0">;</span>
+
+<span class="s0">public class </span><span class="s1">HomeFragment </span><span class="s0">extends </span><span class="s1">Fragment {</span>
+
+    <span class="s0">private </span><span class="s1">RecyclerView recyclerView</span><span class="s0">;</span>
+    <span class="s0">private </span><span class="s1">PostAdapter postAdapter</span><span class="s0">;</span>
+    <span class="s0">private </span><span class="s1">List&lt;Post&gt; postList</span><span class="s0">;</span>
+    <span class="s0">private </span><span class="s1">List&lt;String&gt; followingList</span><span class="s0">;</span>
+
+    <span class="s1">@Override</span>
+    <span class="s0">public </span><span class="s1">View onCreateView(LayoutInflater inflater</span><span class="s0">, </span><span class="s1">ViewGroup container</span><span class="s0">,</span>
+                             <span class="s1">Bundle savedInstanceState) {</span>
+
+        <span class="s1">View view = inflater.inflate(R.layout.fragment_home</span><span class="s0">, </span><span class="s1">container</span><span class="s0">, false</span><span class="s1">)</span><span class="s0">;</span>
+
+        <span class="s1">recyclerView = view.findViewById(R.id.recycler_view)</span><span class="s0">;</span>
+        <span class="s1">recyclerView.setHasFixedSize(</span><span class="s0">true</span><span class="s1">)</span><span class="s0">;</span>
+        <span class="s1">LinearLayoutManager linearLayoutManager = </span><span class="s0">new </span><span class="s1">LinearLayoutManager(getContext())</span><span class="s0">;</span>
+        <span class="s1">linearLayoutManager.setReverseLayout(</span><span class="s0">true</span><span class="s1">)</span><span class="s0">;</span>
+        <span class="s1">linearLayoutManager.setStackFromEnd(</span><span class="s0">true</span><span class="s1">)</span><span class="s0">;</span>
+        <span class="s1">recyclerView.setLayoutManager(linearLayoutManager)</span><span class="s0">;</span>
+        <span class="s1">postList = </span><span class="s0">new </span><span class="s1">ArrayList&lt;&gt;()</span><span class="s0">;</span>
+        <span class="s1">postAdapter = </span><span class="s0">new </span><span class="s1">PostAdapter(getContext()</span><span class="s0">, </span><span class="s1">postList)</span><span class="s0">;</span>
+        <span class="s1">recyclerView.setAdapter(postAdapter)</span><span class="s0">;</span>
+
+        <span class="s1">checkFollowing()</span><span class="s0">;</span>
+
+        <span class="s0">return </span><span class="s1">view</span><span class="s0">;</span>
+    <span class="s1">}</span>
+
+    <span class="s0">private void </span><span class="s1">checkFollowing(){</span>
+
+        <span class="s1">followingList = </span><span class="s0">new </span><span class="s1">ArrayList&lt;&gt;()</span><span class="s0">;</span>
+
+        <span class="s1">DatabaseReference reference = FirebaseDatabase.getInstance().getReference(</span><span class="s2">&quot;Usuarios&quot;</span><span class="s1">)</span>
+                <span class="s1">.child(FirebaseAuth.getInstance().getCurrentUser().getUid())</span><span class="s0">;</span>
+
+        <span class="s1">reference.addValueEventListener(</span><span class="s0">new </span><span class="s1">ValueEventListener() {</span>
+            <span class="s1">@Override</span>
+            <span class="s0">public void </span><span class="s1">onDataChange(@NonNull DataSnapshot snapshot) {</span>
+                <span class="s1">followingList.clear()</span><span class="s0">;</span>
+                <span class="s0">for</span><span class="s1">(DataSnapshot snapshot1 : snapshot.getChildren()){</span>
+                    <span class="s1">followingList.add(snapshot.getKey())</span><span class="s0">;</span>
+                <span class="s1">}</span>
+
+                <span class="s1">readPosts()</span><span class="s0">;</span>
+            <span class="s1">}</span>
+
+            <span class="s1">@Override</span>
+            <span class="s0">public void </span><span class="s1">onCancelled(@NonNull DatabaseError error) {</span>
+
+            <span class="s1">}</span>
+        <span class="s1">})</span><span class="s0">;</span>
+
+    <span class="s1">}</span>
+
+    <span class="s0">private void </span><span class="s1">readPosts(){</span>
+        <span class="s1">DatabaseReference reference = FirebaseDatabase.getInstance().getReference(</span><span class="s2">&quot;publicaciones&quot;</span><span class="s1">)</span><span class="s0">;</span>
+
+        <span class="s1">reference.addValueEventListener(</span><span class="s0">new </span><span class="s1">ValueEventListener() {</span>
+            <span class="s1">@Override</span>
+            <span class="s0">public void </span><span class="s1">onDataChange(@NonNull DataSnapshot snapshot) {</span>
+                <span class="s1">Log.w(</span><span class="s2">&quot;Estado&quot;</span><span class="s0">, </span><span class="s2">&quot;llega 1&quot;</span><span class="s1">)</span><span class="s0">;</span>
+                <span class="s1">postList.clear()</span><span class="s0">;</span>
+                <span class="s0">for</span><span class="s1">(DataSnapshot datasnapshot : snapshot.getChildren()){</span>
+                    <span class="s1">Log.w(</span><span class="s2">&quot;Estado&quot;</span><span class="s0">, </span><span class="s2">&quot;llega 2&quot;</span><span class="s1">)</span><span class="s0">;</span>
+                    <span class="s1">Post post = snapshot.getValue(Post.</span><span class="s0">class</span><span class="s1">)</span><span class="s0">;</span>
+                    <span class="s0">for</span><span class="s1">(String id: followingList){</span>
+                        <span class="s1">Log.w(</span><span class="s2">&quot;Estadooo&quot;</span><span class="s0">, </span><span class="s1">id)</span><span class="s0">;</span>
+                        <span class="s1">Log.w(</span><span class="s2">&quot;Estado&quot;</span><span class="s0">, </span><span class="s1">post.getPostID())</span><span class="s0">;</span>
+                        <span class="s0">if</span><span class="s1">(post.getPostID().equals(id)){</span>
+                            <span class="s1">postList.add(post)</span><span class="s0">;</span>
+                        <span class="s1">}</span>
+                    <span class="s1">}</span>
+                <span class="s1">}</span>
+
+                <span class="s1">postAdapter.notifyDataSetChanged()</span><span class="s0">;</span>
+            <span class="s1">}</span>
+
+            <span class="s1">@Override</span>
+            <span class="s0">public void </span><span class="s1">onCancelled(@NonNull DatabaseError error) {</span>
+
+            <span class="s1">}</span>
+        <span class="s1">})</span><span class="s0">;</span>
+    <span class="s1">}</span>
+<span class="s1">}</span></pre>
+</body>
+</html>

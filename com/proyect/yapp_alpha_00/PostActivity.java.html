@@ -1,0 +1,175 @@
+<html>
+<head>
+<title>PostActivity.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cc7832;}
+.s1 { color: #a9b7c6;}
+.s2 { color: #6a8759;}
+.s3 { color: #6897bb;}
+</style>
+</head>
+<body bgcolor="#2b2b2b">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+PostActivity.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">com.proyect.yapp_alpha_00</span><span class="s0">;</span>
+
+<span class="s0">import </span><span class="s1">androidx.annotation.NonNull</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">androidx.annotation.Nullable</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">androidx.appcompat.app.AppCompatActivity</span><span class="s0">;</span>
+
+<span class="s0">import </span><span class="s1">android.app.ProgressDialog</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">android.content.ContentResolver</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">android.content.Intent</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">android.net.Uri</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">android.os.Bundle</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">android.view.View</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">android.webkit.MimeTypeMap</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">android.widget.EditText</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">android.widget.ImageView</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">android.widget.TextView</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">android.widget.Toast</span><span class="s0">;</span>
+
+<span class="s0">import </span><span class="s1">com.google.android.gms.tasks.Continuation</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">com.google.android.gms.tasks.OnCompleteListener</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">com.google.android.gms.tasks.OnFailureListener</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">com.google.android.gms.tasks.Task</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">com.google.firebase.auth.FirebaseAuth</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">com.google.firebase.database.DatabaseReference</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">com.google.firebase.database.FirebaseDatabase</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">com.google.firebase.storage.FirebaseStorage</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">com.google.firebase.storage.StorageReference</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">com.google.firebase.storage.StorageTask</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">com.theartofdev.edmodo.cropper.CropImage</span><span class="s0">;</span>
+
+<span class="s0">import </span><span class="s1">java.util.HashMap</span><span class="s0">;</span>
+
+<span class="s0">public class </span><span class="s1">PostActivity </span><span class="s0">extends </span><span class="s1">AppCompatActivity {</span>
+
+    <span class="s1">Uri imameUri</span><span class="s0">;</span>
+    <span class="s1">String myUrk = </span><span class="s2">&quot;&quot;</span><span class="s0">;</span>
+    <span class="s1">StorageTask uploadTask</span><span class="s0">;</span>
+    <span class="s1">StorageReference storageReference</span><span class="s0">;</span>
+
+    <span class="s1">ImageView close</span><span class="s0">, </span><span class="s1">image_added</span><span class="s0">;</span>
+    <span class="s1">TextView post</span><span class="s0">;</span>
+    <span class="s1">EditText title</span><span class="s0">, </span><span class="s1">description</span><span class="s0">;</span>
+
+    <span class="s1">@Override</span>
+    <span class="s0">protected void </span><span class="s1">onCreate(Bundle savedInstanceState) {</span>
+        <span class="s0">super</span><span class="s1">.onCreate(savedInstanceState)</span><span class="s0">;</span>
+        <span class="s1">setContentView(R.layout.activity_post)</span><span class="s0">;</span>
+
+        <span class="s1">close = findViewById(R.id.close)</span><span class="s0">;</span>
+        <span class="s1">image_added = findViewById(R.id.image_added)</span><span class="s0">;</span>
+        <span class="s1">post = findViewById(R.id.post)</span><span class="s0">;</span>
+        <span class="s1">title = findViewById(R.id.title)</span><span class="s0">;</span>
+        <span class="s1">description = findViewById(R.id.description)</span><span class="s0">;</span>
+
+        <span class="s1">storageReference = FirebaseStorage.getInstance().getReference(</span><span class="s2">&quot;publicaciones&quot;</span><span class="s1">)</span><span class="s0">;</span>
+
+        <span class="s1">close.setOnClickListener(</span><span class="s0">new </span><span class="s1">View.OnClickListener() {</span>
+            <span class="s1">@Override</span>
+            <span class="s0">public void </span><span class="s1">onClick(View v) {</span>
+                <span class="s1">startActivity(</span><span class="s0">new </span><span class="s1">Intent(PostActivity.</span><span class="s0">this, </span><span class="s1">MainActivity.</span><span class="s0">class</span><span class="s1">))</span><span class="s0">;</span>
+                <span class="s1">finish()</span><span class="s0">;</span>
+            <span class="s1">}</span>
+        <span class="s1">})</span><span class="s0">;</span>
+
+        <span class="s1">post.setOnClickListener(</span><span class="s0">new </span><span class="s1">View.OnClickListener() {</span>
+            <span class="s1">@Override</span>
+            <span class="s0">public void </span><span class="s1">onClick(View v) {</span>
+                <span class="s1">uploadImage()</span><span class="s0">;</span>
+            <span class="s1">}</span>
+        <span class="s1">})</span><span class="s0">;</span>
+
+        <span class="s1">CropImage.activity().setAspectRatio(</span><span class="s3">1</span><span class="s0">,</span><span class="s3">1</span><span class="s1">).start(PostActivity.</span><span class="s0">this</span><span class="s1">)</span><span class="s0">;</span>
+
+    <span class="s1">}</span>
+
+    <span class="s0">private </span><span class="s1">String getFileExtension(Uri uri){</span>
+        <span class="s1">ContentResolver contentResolver = getContentResolver()</span><span class="s0">;</span>
+        <span class="s1">MimeTypeMap mime = MimeTypeMap.getSingleton()</span><span class="s0">;</span>
+        <span class="s0">return </span><span class="s1">mime.getExtensionFromMimeType(contentResolver.getType(uri))</span><span class="s0">;</span>
+    <span class="s1">}</span>
+
+    <span class="s0">private void </span><span class="s1">uploadImage(){</span>
+        <span class="s1">ProgressDialog progressDialog = </span><span class="s0">new </span><span class="s1">ProgressDialog(</span><span class="s0">this</span><span class="s1">)</span><span class="s0">;</span>
+        <span class="s1">progressDialog.setMessage(</span><span class="s2">&quot;Estamos publicando tu noticia&quot;</span><span class="s1">)</span><span class="s0">;</span>
+        <span class="s1">progressDialog.show()</span><span class="s0">;</span>
+
+        <span class="s0">if</span><span class="s1">(imameUri != </span><span class="s0">null</span><span class="s1">){</span>
+            <span class="s1">StorageReference fileReference = storageReference.child(System.currentTimeMillis() + </span><span class="s2">&quot;,&quot; </span><span class="s1">+ getFileExtension(imameUri))</span><span class="s0">;</span>
+
+            <span class="s1">uploadTask = fileReference.putFile(imameUri)</span><span class="s0">;</span>
+            <span class="s1">uploadTask.continueWithTask(</span><span class="s0">new </span><span class="s1">Continuation() {</span>
+                <span class="s1">@Override</span>
+                <span class="s0">public </span><span class="s1">Object then(@NonNull Task task) </span><span class="s0">throws </span><span class="s1">Exception {</span>
+                    <span class="s0">if</span><span class="s1">(!task.isComplete()){</span>
+                        <span class="s0">throw </span><span class="s1">task.getException()</span><span class="s0">;</span>
+                    <span class="s1">}</span>
+                    <span class="s0">return </span><span class="s1">fileReference.getDownloadUrl()</span><span class="s0">;</span>
+                <span class="s1">}</span>
+            <span class="s1">}).addOnCompleteListener(</span><span class="s0">new </span><span class="s1">OnCompleteListener&lt;Uri&gt;() {</span>
+                <span class="s1">@Override</span>
+                <span class="s0">public void </span><span class="s1">onComplete(@NonNull Task&lt;Uri&gt; task) {</span>
+                    <span class="s0">if</span><span class="s1">(task.isSuccessful()){</span>
+                        <span class="s1">Uri downloadUri = task.getResult()</span><span class="s0">;</span>
+                        <span class="s1">myUrk = downloadUri.toString()</span><span class="s0">;</span>
+
+                        <span class="s1">DatabaseReference reference = FirebaseDatabase.getInstance().getReference(</span><span class="s2">&quot;publicaciones&quot;</span><span class="s1">)</span><span class="s0">;</span>
+                        <span class="s1">String postID = reference.push().getKey()</span><span class="s0">;</span>
+
+                        <span class="s1">HashMap&lt;String</span><span class="s0">, </span><span class="s1">Object&gt; hashMap = </span><span class="s0">new </span><span class="s1">HashMap&lt;&gt;()</span><span class="s0">;</span>
+                        <span class="s1">hashMap.put(</span><span class="s2">&quot;postid&quot;</span><span class="s0">, </span><span class="s1">postID)</span><span class="s0">;</span>
+                        <span class="s1">hashMap.put(</span><span class="s2">&quot;postimg&quot;</span><span class="s0">, </span><span class="s1">myUrk)</span><span class="s0">;</span>
+                        <span class="s1">hashMap.put(</span><span class="s2">&quot;posttitulo&quot;</span><span class="s0">, </span><span class="s1">title.getText().toString())</span><span class="s0">;</span>
+                        <span class="s1">hashMap.put(</span><span class="s2">&quot;descripcion&quot;</span><span class="s0">, </span><span class="s1">description.getText().toString())</span><span class="s0">;</span>
+                        <span class="s1">hashMap.put(</span><span class="s2">&quot;usuario&quot;</span><span class="s0">, </span><span class="s1">FirebaseAuth.getInstance().getCurrentUser().getUid())</span><span class="s0">;</span>
+
+                        <span class="s1">reference.child(postID).setValue(hashMap)</span><span class="s0">;</span>
+
+                        <span class="s1">progressDialog.dismiss()</span><span class="s0">;</span>
+
+                        <span class="s1">startActivity(</span><span class="s0">new </span><span class="s1">Intent(PostActivity.</span><span class="s0">this, </span><span class="s1">MainActivity.</span><span class="s0">class</span><span class="s1">))</span><span class="s0">;</span>
+                        <span class="s1">finish()</span><span class="s0">;</span>
+                    <span class="s1">}</span>
+                    <span class="s0">else</span><span class="s1">{</span>
+                        <span class="s1">Toast.makeText(PostActivity.</span><span class="s0">this, </span><span class="s2">&quot;Algo salio mal :(&quot;</span><span class="s0">, </span><span class="s1">Toast.LENGTH_SHORT)</span><span class="s0">;</span>
+                    <span class="s1">}</span>
+                <span class="s1">}</span>
+            <span class="s1">}).addOnFailureListener(</span><span class="s0">new </span><span class="s1">OnFailureListener() {</span>
+                <span class="s1">@Override</span>
+                <span class="s0">public void </span><span class="s1">onFailure(@NonNull Exception e) {</span>
+                    <span class="s1">Toast.makeText(PostActivity.</span><span class="s0">this, </span><span class="s1">e.getMessage()</span><span class="s0">, </span><span class="s1">Toast.LENGTH_SHORT)</span><span class="s0">;</span>
+                <span class="s1">}</span>
+            <span class="s1">})</span><span class="s0">;</span>
+        <span class="s1">}</span>
+        <span class="s0">else</span><span class="s1">{</span>
+            <span class="s1">Toast.makeText(PostActivity.</span><span class="s0">this, </span><span class="s2">&quot;No hay imagen :(&quot;</span><span class="s0">, </span><span class="s1">Toast.LENGTH_SHORT)</span><span class="s0">;</span>
+        <span class="s1">}</span>
+    <span class="s1">}</span>
+
+    <span class="s1">@Override</span>
+    <span class="s0">protected void </span><span class="s1">onActivityResult(</span><span class="s0">int </span><span class="s1">requestCode</span><span class="s0">, int </span><span class="s1">resultCode</span><span class="s0">, </span><span class="s1">@Nullable Intent data) {</span>
+        <span class="s0">super</span><span class="s1">.onActivityResult(requestCode</span><span class="s0">, </span><span class="s1">resultCode</span><span class="s0">, </span><span class="s1">data)</span><span class="s0">;</span>
+
+        <span class="s0">if</span><span class="s1">(requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE &amp;&amp; resultCode == RESULT_OK){</span>
+            <span class="s1">CropImage.ActivityResult result = CropImage.getActivityResult(data)</span><span class="s0">;</span>
+            <span class="s1">imameUri = result.getUri()</span><span class="s0">;</span>
+
+            <span class="s1">image_added.setImageURI(imameUri)</span><span class="s0">;</span>
+        <span class="s1">}</span>
+        <span class="s0">else</span><span class="s1">{</span>
+            <span class="s1">Toast.makeText(PostActivity.</span><span class="s0">this, </span><span class="s2">&quot;Algo salio mal :(&quot;</span><span class="s0">, </span><span class="s1">Toast.LENGTH_SHORT).show()</span><span class="s0">;</span>
+            <span class="s1">startActivity(</span><span class="s0">new </span><span class="s1">Intent(PostActivity.</span><span class="s0">this, </span><span class="s1">MainActivity.</span><span class="s0">class</span><span class="s1">))</span><span class="s0">;</span>
+            <span class="s1">finish()</span><span class="s0">;</span>
+        <span class="s1">}</span>
+    <span class="s1">}</span>
+<span class="s1">}</span>
+</pre>
+</body>
+</html>

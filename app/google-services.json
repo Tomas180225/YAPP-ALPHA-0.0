@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "977277375750",
+    "firebase_url": "https://yapp-beta.firebaseio.com",
+    "project_id": "yapp-beta",
+    "storage_bucket": "yapp-beta.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:977277375750:android:8a1672263847b126923a87",
+        "android_client_info": {
+          "package_name": "com.proyect.yapp_alpha_00"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "977277375750-307tr46c6v1fg8jeq8bc4he5k1cq00b0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAdWkJQRvJers9rw9AdBJnXecFwmfqPp80"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "977277375750-307tr46c6v1fg8jeq8bc4he5k1cq00b0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

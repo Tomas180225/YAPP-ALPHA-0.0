@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/bar"
+        android:background="?android:attr/windowBackground">
+
+        <androidx.appcompat.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp">
+
+                <ImageView
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginTop="10dp"
+                    android:src="@drawable/logo_yapp"
+                    android:layout_centerVertical="true"/>
+
+                <ImageView
+                    android:layout_width="35dp"
+                    android:layout_height="50dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="90dp"
+                    android:layout_marginTop="10dp"
+                    android:src="@drawable/ic_filter"
+                    android:layout_centerVertical="true"/>
+
+                <ImageView
+                    android:layout_width="70dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentEnd="false"
+                    android:layout_marginStart="-10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginTop="10dp"
+                    android:src="@drawable/ic_menu"
+                    android:id="@+id/top_menu"
+                    android:layout_centerVertical="true"/>
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:layout_toEndOf="@id/top_menu"
+                    android:layout_marginEnd="130dp"
+                    android:layout_centerVertical="true"
+                    android:background="@color/transparent"
+                    android:maxLines="1"
+                    android:id="@+id/top_search"/>
+
+                <ImageView
+                    android:layout_width="35dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="130dp"
+                    android:layout_marginTop="10dp"
+                    android:src="@drawable/ic_search"
+                    android:layout_centerVertical="true"/>
+
+            </RelativeLayout>
+
+        </androidx.appcompat.widget.Toolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/bar"
+        android:layout_above="@+id/bottom"
+        android:id="@+id/fragment_container"/>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/bottom"
+        android:layout_alignParentBottom="true">
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/bottom_navigation"
+            app:itemIconTint="@color/colorPrincipal"
+            app:labelVisibilityMode="unlabeled"
+            android:background="?android:attr/windowBackground"
+            app:menu="@menu/bottom_navigation"/>
+
+    </com.google.android.material.bottomnavigation.BottomNavigationView>
+
+</RelativeLayout>
