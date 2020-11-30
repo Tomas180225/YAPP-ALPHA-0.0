@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".SurveyActivity">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="HOLA!"
+        android:textColor="@color/colorPrincipal"
+        android:textStyle="bold"
+        android:fontFamily="sans-serif-condensed-light"
+        android:textSize="28dp"
+        android:textAlignment="center"
+        android:layout_marginTop="60dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Te damos la bienvenida a \n YAPP NEWS"
+        android:textColor="@color/colorPrincipal"
+        android:textStyle="bold"
+        android:fontFamily="sans-serif-condensed-light"
+        android:textSize="24dp"
+        android:textAlignment="center"
+        android:layout_marginTop="10dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Escoge tus categorias favoritas!"
+        android:textColor="@color/colorPrincipal"
+        android:fontFamily="sans-serif-condensed-light"
+        android:textSize="24dp"
+        android:textAlignment="center"
+        android:layout_marginTop="30dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_marginTop="65dp"
+            android:textAlignment="center"
+            android:id="@+id/done"
+            android:tint="@color/white"
+            android:src="@drawable/ic_add"
+            app:maxImageSize="40dp"
+            android:background="@color/colorPrincipal"
+            android:layout_marginEnd="20dp"
+            android:padding="30dp"
+            android:layout_marginBottom="40dp"/>
+
+    </LinearLayout>
+
+</LinearLayout>
