@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navPerfil"
+        android:title="@string/perfil"
+        android:icon="@drawable/ic_drawer_perfil"
+        />
+    <item
+        android:id="@+id/navGuardados"
+        android:title="@string/guardados"
+        android:icon="@drawable/ic_drawer_guardados"
+        />
+    <item
+        android:id="@+id/navAjustes"
+        android:title="@string/ajustes"
+        android:icon="@drawable/ic_drawer_ajustes"
+        />
+    <item
+        android:id="@+id/navCerrar"
+        android:title="@string/cerrar_sesión"
+        android:icon="@drawable/ic_drawer_salir"
+        />
+
+</menu>

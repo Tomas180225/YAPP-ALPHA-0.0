@@ -12,8 +12,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -22,7 +22,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.proyect.yapp_alpha_00.Adapters.ArrayAdapter;
 import com.proyect.yapp_alpha_00.Adapters.PostAdapter;
 import com.proyect.yapp_alpha_00.Adapters.PostAdapterPIla;
-import com.proyect.yapp_alpha_00.Estructuras.Pila;
 import com.proyect.yapp_alpha_00.Model.Post;
 import com.proyect.yapp_alpha_00.PostActivity;
 import com.proyect.yapp_alpha_00.R;
@@ -32,11 +31,7 @@ import java.util.List;
 
 public class CommunityFragment extends Fragment {
 
-    private RecyclerView recyclerView;
-    private RecyclerView recyclerViewPila;
-    private ImageView btn_publicar;
     private PostAdapter postAdapter;
-    private PostAdapterPIla postAdapterPila;
     private List<Post> postList;
     private ArrayAdapter pila;
 
@@ -46,17 +41,12 @@ public class CommunityFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_community, container, false);
 
-        recyclerView = view.findViewById(R.id.recycler_view);
-        recyclerViewPila = view.findViewById(R.id.recycler_view_pila);
+        RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
+        RecyclerView recyclerViewPila = view.findViewById(R.id.recycler_view_pila);
 
-        btn_publicar = view.findViewById(R.id.btn_upload);
+        FloatingActionButton btn_publicar = view.findViewById(R.id.btn_upload);
 
-        btn_publicar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getActivity(), PostActivity.class));
-            }
-        });
+        btn_publicar.setOnClickListener(v -> startActivity(new Intent(getActivity(), PostActivity.class)));
 
         recyclerView.setHasFixedSize(true);
         recyclerViewPila.setHasFixedSize(true);
@@ -69,7 +59,7 @@ public class CommunityFragment extends Fragment {
         postList = new ArrayList<>();
         pila = new ArrayAdapter();
         postAdapter = new PostAdapter(getContext(), postList);
-        postAdapterPila = new PostAdapterPIla(getContext(), pila);
+        PostAdapterPIla postAdapterPila = new PostAdapterPIla(getContext(), pila);
         recyclerView.setAdapter(postAdapter);
         recyclerViewPila.setAdapter(postAdapterPila);
 

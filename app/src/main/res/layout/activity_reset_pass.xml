@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".resetPasswordActivity">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:contentDescription="@string/app_name"
+            android:layout_width="184dp"
+            android:layout_height="213dp"
+            app:srcCompat="@drawable/logo_yapp"
+            android:layout_gravity="center"
+            android:layout_marginTop="100dp"/>
+        <TextView
+            android:id="@+id/muchoTexto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginVertical="25dp"
+            android:text="@string/recup_contra"
+            android:layout_gravity="center_horizontal"
+            />
+        <EditText
+            android:id="@+id/txtCorreoResetContra"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"
+            android:drawableStart="@drawable/ic_correo"
+            android:background="@drawable/edittext_background"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:drawablePadding="10dp"
+            android:ems="10"
+            android:hint="Correo electrónico"
+            android:inputType="textEmailAddress"
+            android:layout_gravity="center"
+            android:autofillHints=""
+            tools:ignore="HardcodedText" />
+
+        <Button
+            android:id="@+id/botonResetContra"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginRight="20dp"
+            android:backgroundTint="@color/colorPrincipal"
+            android:enabled="true"
+            android:text="Reiniciar Contraseña"
+            android:textColor="@color/white"
+            app:backgroundTint="@null"
+            tools:ignore="HardcodedText" />
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -17,7 +17,9 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:drawableStart="@drawable/ic_correo"
         android:background="@drawable/edittext_background"
+        android:drawablePadding="10dp"
         android:hint="Email"
         android:layout_marginTop="15dp"
         android:inputType="textEmailAddress"
@@ -28,6 +30,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/edittext_background"
+        android:drawableStart="@drawable/ic_contrasena"
+        android:drawablePadding="10dp"
         android:hint="Contraseña"
         android:layout_marginTop="15dp"
         android:inputType="textPassword"

@@ -4,16 +4,16 @@
     <item
         android:id="@+id/nav_community"
         android:icon="@drawable/ic_home"
-        android:title=""/>
+        android:title="@string/noticias"/>
 
     <item
         android:id="@+id/nav_discusion"
         android:icon="@drawable/ic_discusion"
-        android:title=""/>
+        android:title="@string/discusion"/>
 
     <item
         android:id="@+id/nav_noticias"
         android:icon="@drawable/ic_community"
-        android:title=""/>
+        android:title="@string/comunidad"/>
 
 </menu>
