@@ -1,6 +1,8 @@
 package com.proyect.yapp_alpha_00.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -19,7 +23,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.proyect.yapp_alpha_00.Estructuras.Pila;
+import com.proyect.yapp_alpha_00.CommentActivity;
+import com.proyect.yapp_alpha_00.Fragment.DiscusionFragment;
+import com.proyect.yapp_alpha_00.MainActivity;
 import com.proyect.yapp_alpha_00.Model.Post;
 import com.proyect.yapp_alpha_00.Model.User;
 import com.proyect.yapp_alpha_00.R;
@@ -53,7 +59,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
         if(post.getDescripcion().equals("")){
             holder.description.setVisibility(View.GONE);
         }
-        else if(post.getDescripcion().length() > 200){
+        else if(post.getDescripcion().length() > 165){
             holder.title.setText(post.getPosttitulo());
             holder.description.setVisibility(View.VISIBLE);
             holder.description.setText(post.getDescripcion().substring(0, 165) + "...");
@@ -65,11 +71,34 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
         }
 
         AuthorInformation(holder.image_profile, holder.username, post.getUsuario());
+
+        getComments(post.getPostid(), holder.comments);
+
+        holder.comment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, MainActivity.class);
+                intent.putExtra("postID", post.getPostid());
+                intent.putExtra("authorID", post.getUsuario());
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                mContext.startActivity(intent);
+            }
+        });
+
+        holder.comments.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, MainActivity.class);
+                intent.putExtra("postID", post.getPostid());
+                intent.putExtra("authorID", post.getUsuario());
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                mContext.startActivity(intent);
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
-        Log.w("TamañoArray", String.valueOf(mPost.size()));
         return mPost.size();
     }
 
@@ -91,6 +120,22 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
             comments = itemView.findViewById(R.id.comments);
         }
 
+    }
+
+    private void getComments(String postID, final TextView comments){
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("comentarios").child(postID);
+
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                comments.setText("Ir al foro de discusion: "+ snapshot.getChildrenCount() + " comentarios");
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     private void AuthorInformation(final ImageView image_profile, final TextView username, final String userID){

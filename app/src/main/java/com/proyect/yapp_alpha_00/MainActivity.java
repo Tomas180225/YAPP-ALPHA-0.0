@@ -1,9 +1,14 @@
 package com.proyect.yapp_alpha_00;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -17,6 +22,7 @@ import androidx.fragment.app.Fragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.proyect.yapp_alpha_00.Fragment.CommunityFragment;
 import com.proyect.yapp_alpha_00.Fragment.DiscusionFragment;
 import com.proyect.yapp_alpha_00.Fragment.HomeFragment;
@@ -28,7 +34,14 @@ public class MainActivity extends AppCompatActivity {
     ActionBarDrawerToggle actionBarDrawerToggle;
     DrawerLayout drawerLayout;
     BottomNavigationView bottomNavigationView;
+    int mMenuId;
     Fragment selectedFragment = null;
+
+    EditText addComment;
+    ImageView image_profile;
+    TextView post;
+    String postID;
+    String AuthorID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,12 +68,37 @@ public class MainActivity extends AppCompatActivity {
         actionBarDrawerToggle.syncState();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-
-
         //BottomNavigation instancia
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
+        bottomNavigationView.getMenu().findItem(R.id.nav_community).setChecked(true);
+
+        addComment = findViewById(R.id.add_comment);
+        image_profile = findViewById(R.id.image_profile);
+        post = findViewById(R.id.post);
+
+        Intent args = getIntent();
+        postID = args.getStringExtra("postID");
+        AuthorID = args.getStringExtra("authorID");
+
+        Bundle intent = getIntent().getExtras();
+        if(intent != null){
+            String autorID = intent.getString("authorID");
+            String postID = intent.getString("postID");
+
+            SharedPreferences.Editor editor = getSharedPreferences("PREFS", MODE_PRIVATE).edit();
+
+            editor.putString("authorID", autorID);
+            editor.putString("postID", postID);
+            editor.apply();
+
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new DiscusionFragment()).commit();
+            bottomNavigationView.getMenu().findItem(R.id.nav_discusion).setChecked(true);
+        }
+        else{
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
+        }
+
 
 
         buscar = findViewById(R.id.top_search);
@@ -81,6 +119,13 @@ public class MainActivity extends AppCompatActivity {
             new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
                 public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+                    mMenuId = item.getItemId();
+                    for(int i = 0; i < bottomNavigationView.getMenu().size(); i++){
+                        MenuItem menuItem = bottomNavigationView.getMenu().getItem(i);
+                        boolean isChecked = menuItem.getItemId() == item.getItemId();
+                        menuItem.setChecked(isChecked);
+                    }
 
                     switch (item.getItemId()){
                         case R.id.nav_noticias:
