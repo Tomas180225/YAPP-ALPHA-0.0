@@ -9,7 +9,7 @@
     android:orientation="vertical">
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/prof_pic"
+        android:id="@+id/profile_image_menu"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_marginTop="50dp"
@@ -20,14 +20,15 @@
         app:civ_border_color="@color/colorPrincipal"/>
 
     <TextView
-        android:id="@+id/nombre_perfil"
+        android:id="@+id/username_menu"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="30dp"
         android:layout_marginTop="5dp"
         android:textColor="@color/white"
         android:textStyle="bold"
-        android:textSize="15sp"
+        android:fontFamily="sans-serif-condensed-light"
+        android:textSize="18dp"
         android:layout_gravity="start"
         android:gravity="start"
         android:text="Nombre de usuario aquí" />

@@ -3,7 +3,7 @@ package com.proyect.yapp_alpha_00;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.provider.ContactsContract;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -19,22 +19,35 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.proyect.yapp_alpha_00.Fragment.CommunityFragment;
 import com.proyect.yapp_alpha_00.Fragment.DiscusionFragment;
 import com.proyect.yapp_alpha_00.Fragment.HomeFragment;
+import com.proyect.yapp_alpha_00.Fragment.ProfileFragment;
+import com.proyect.yapp_alpha_00.Fragment.SavedFragment;
+import com.proyect.yapp_alpha_00.Fragment.SettingsFragment;
+import com.proyect.yapp_alpha_00.Model.User;
 
 public class MainActivity extends AppCompatActivity {
-
 
     SearchView buscar;
     ActionBarDrawerToggle actionBarDrawerToggle;
     DrawerLayout drawerLayout;
+    NavigationView navigationView;
     BottomNavigationView bottomNavigationView;
-    int mMenuId;
+    int MenuBottomId;
+    int MenuDrawerId;
+    ImageView profile_image_menu;
+    TextView username_menu;
     Fragment selectedFragment = null;
 
     EditText addComment;
@@ -42,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
     TextView post;
     String postID;
     String AuthorID;
+
+    FirebaseUser firebaseUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,13 +68,14 @@ public class MainActivity extends AppCompatActivity {
 
         //Menú desplegable
         drawerLayout = findViewById(R.id.drawerLayout);
-        NavigationView navigationView = findViewById(R.id.nav_View);
+        navigationView = findViewById(R.id.nav_View);
         View navHeader = navigationView.getHeaderView(0);
         navigationView.setNavigationItemSelectedListener(item -> {
-            item.setChecked(true);
             selectorMenu(item);
             return true;
         });
+        profile_image_menu = navHeader.findViewById(R.id.profile_image_menu);
+        username_menu = navHeader.findViewById(R.id.username_menu);
 
 
         //Hamburguer icon
@@ -81,6 +97,10 @@ public class MainActivity extends AppCompatActivity {
         postID = args.getStringExtra("postID");
         AuthorID = args.getStringExtra("authorID");
 
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        userInfo();
+
         Bundle intent = getIntent().getExtras();
         if(intent != null){
             String autorID = intent.getString("authorID");
@@ -88,7 +108,8 @@ public class MainActivity extends AppCompatActivity {
 
             SharedPreferences.Editor editor = getSharedPreferences("PREFS", MODE_PRIVATE).edit();
 
-            editor.putString("authorID", autorID);
+            Log.w("Usuario", firebaseUser.getUid());
+            editor.putString("profileID", firebaseUser.getUid());
             editor.putString("postID", postID);
             editor.apply();
 
@@ -96,6 +117,9 @@ public class MainActivity extends AppCompatActivity {
             bottomNavigationView.getMenu().findItem(R.id.nav_discusion).setChecked(true);
         }
         else{
+            SharedPreferences.Editor editor = getSharedPreferences("PREFS", MODE_PRIVATE).edit();
+            editor.putString("profileID", firebaseUser.getUid());
+            editor.apply();
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
         }
 
@@ -120,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
-                    mMenuId = item.getItemId();
+                    MenuBottomId = item.getItemId();
                     for(int i = 0; i < bottomNavigationView.getMenu().size(); i++){
                         MenuItem menuItem = bottomNavigationView.getMenu().getItem(i);
                         boolean isChecked = menuItem.getItemId() == item.getItemId();
@@ -148,14 +172,25 @@ public class MainActivity extends AppCompatActivity {
                 }
     };
     private void selectorMenu(MenuItem item) {
+
+        MenuDrawerId = item.getItemId();
+        for(int i = 0; i < navigationView.getMenu().size(); i++){
+            MenuItem menuItem = navigationView.getMenu().getItem(i);
+            boolean isChecked = menuItem.getItemId() == item.getItemId();
+            menuItem.setChecked(isChecked);
+        }
+
         switch(item.getItemId()){
             case R.id.navPerfil:
+                selectedFragment = new ProfileFragment();
                 Toast.makeText(MainActivity.this, "Perfil", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.navGuardados:
+                selectedFragment = new SavedFragment();
                 Toast.makeText(MainActivity.this, "Colecciones", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.navAjustes:
+                selectedFragment = new SettingsFragment();
                 Toast.makeText(MainActivity.this, "Ajustes", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.navCerrar:
@@ -165,10 +200,34 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, LoginActivity.class));
                 break;
         }
+        if(selectedFragment != null){
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,selectedFragment).commit();
+            drawerLayout.closeDrawers();
+        }
+
     }
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if(actionBarDrawerToggle.onOptionsItemSelected(item)) return true;
         return super.onOptionsItemSelected(item);
+    }
+
+    private void userInfo(){
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Usuarios")
+                .child(firebaseUser.getUid());
+
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                User user = snapshot.getValue(User.class);
+                Glide.with(MainActivity.this).load(user.getImg()).into(profile_image_menu);
+                username_menu.setText(user.getUsuario());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 }

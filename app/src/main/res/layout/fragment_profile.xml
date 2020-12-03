@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Fragment.ProfileFragment"
+    android:orientation="vertical">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/usuario"
+        android:layout_marginTop="50dp"
+        android:id="@+id/image_profile"
+        android:layout_gravity="center"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Usuario"
+        android:id="@+id/username_p"
+        android:fontFamily="sans-serif-condensed-light"
+        android:textColor="@color/colorPrincipal"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_marginTop="10dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Informacion del usuario"
+        android:fontFamily="sans-serif-condensed-light"
+        android:textColor="@color/colorPrincipal"
+        android:textSize="20dp"
+        android:textStyle=""
+        android:gravity="center"
+        android:layout_marginTop="50dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="30dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nombre: "
+            android:fontFamily="sans-serif-condensed-light"
+            android:textColor="@color/colortexto"
+            android:textSize="20dp"
+            android:layout_marginTop="50dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:id="@+id/name"
+            android:layout_height="wrap_content"
+            android:text="Nombre"
+            android:fontFamily="sans-serif-condensed-light"
+            android:textColor="@color/colortexto"
+            android:textSize="20dp"
+            android:layout_marginTop="50dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="30dp"
+    android:layout_marginTop="-40dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Nombre de Usuario: "
+        android:fontFamily="sans-serif-condensed-light"
+        android:textColor="@color/colortexto"
+        android:textSize="20dp"
+        android:layout_marginTop="50dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/username"
+        android:text="Usuario"
+        android:fontFamily="sans-serif-condensed-light"
+        android:textColor="@color/colortexto"
+        android:textSize="20dp"
+        android:layout_marginTop="50dp"/>
+
+</LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="30dp"
+        android:layout_marginTop="-40dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Telefono: "
+            android:fontFamily="sans-serif-condensed-light"
+            android:textColor="@color/colortexto"
+            android:textSize="20dp"
+            android:layout_marginTop="50dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/cellphone"
+            android:text="Telefono"
+            android:fontFamily="sans-serif-condensed-light"
+            android:textColor="@color/colortexto"
+            android:textSize="20dp"
+            android:layout_marginTop="50dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="30dp"
+        android:layout_marginTop="-40dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tus publicaciones: "
+            android:fontFamily="sans-serif-condensed-light"
+            android:textColor="@color/colortexto"
+            android:textSize="20dp"
+            android:layout_marginTop="50dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:id="@+id/posts"
+            android:fontFamily="sans-serif-condensed-light"
+            android:textColor="@color/colortexto"
+            android:textSize="20dp"
+            android:layout_marginTop="50dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="30dp"
+        android:layout_marginTop="-40dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tus categorias: "
+            android:fontFamily="sans-serif-condensed-light"
+            android:textColor="@color/colortexto"
+            android:textSize="20dp"
+            android:layout_marginTop="50dp"/>
+
+    </LinearLayout>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_background"
+        android:text="Editar perfil"
+        android:textColor="@color/white"
+        android:fontFamily="sans-serif-condensed-light"
+        android:textSize="16dp"
+        android:id="@+id/button_edit"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginTop="30dp"/>
+
+</LinearLayout>
