@@ -3,6 +3,9 @@ package com.proyect.yapp_alpha_00;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
@@ -14,6 +17,7 @@ import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,25 +26,37 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
+import com.proyect.yapp_alpha_00.Adapters.CategoriesAdapter;
+import com.proyect.yapp_alpha_00.Model.Categories;
 import com.theartofdev.edmodo.cropper.CropImage;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 public class PostActivity extends AppCompatActivity {
+
+    List<Categories> categorias;
 
     Uri imameUri;
     String myUrk = "";
     StorageTask uploadTask;
     StorageReference storageReference;
+    CategoriesAdapter categoriesAdapter;
 
     ImageView close, image_added;
     TextView post;
     EditText title, description;
+    RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +68,15 @@ public class PostActivity extends AppCompatActivity {
         post = findViewById(R.id.post);
         title = findViewById(R.id.title);
         description = findViewById(R.id.description);
+        recyclerView = findViewById(R.id.recycler_view);
+        recyclerView.setHasFixedSize(true);
+        LinearLayoutManager linearLayoutManager = new GridLayoutManager(getApplicationContext(),3);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        categorias = new ArrayList<>();
+        categoriesAdapter = new CategoriesAdapter(getApplicationContext(), categorias);
+        recyclerView.setAdapter(categoriesAdapter);
+
+        putCategories();
 
         storageReference = FirebaseStorage.getInstance().getReference("publicaciones");
 
@@ -70,7 +95,11 @@ public class PostActivity extends AppCompatActivity {
             }
         });
 
+        Log.w("Estado", "Finishing OnCreate");
+
         CropImage.activity().setAspectRatio(1,1).start(PostActivity.this);
+
+        Log.w("Estado", "Finish OnCreate");
 
     }
 
@@ -112,7 +141,6 @@ public class PostActivity extends AppCompatActivity {
                         hashMap.put("postimg", myUrk);
                         hashMap.put("posttitulo", title.getText().toString());
                         hashMap.put("descripcion", description.getText().toString());
-                        Log.w("EstadoSet", description.getText().toString());
                         hashMap.put("usuario", FirebaseAuth.getInstance().getCurrentUser().getUid());
 
                         reference.child(postID).setValue(hashMap);
@@ -154,4 +182,29 @@ public class PostActivity extends AppCompatActivity {
             finish();
         }
     }
+
+    private void putCategories(){
+
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("categorias");
+
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                categorias.clear();
+                for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+                    Categories categorie = dataSnapshot.getValue(Categories.class);
+                    categorias.add(categorie);
+                }
+                Collections.reverse(categorias);
+                categoriesAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+    }
+
 }
