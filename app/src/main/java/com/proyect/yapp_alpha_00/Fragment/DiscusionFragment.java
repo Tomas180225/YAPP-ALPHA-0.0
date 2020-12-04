@@ -86,6 +86,7 @@ public class DiscusionFragment extends Fragment {
         SharedPreferences sharedPreferences = getContext().getSharedPreferences("PREFS", Context.MODE_PRIVATE);
         AuthorID = sharedPreferences.getString("authorID", "none");
         postID = sharedPreferences.getString("postID", "none");
+        Log.w("ESTADOUSER", postID);
 
         post.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,10 +100,12 @@ public class DiscusionFragment extends Fragment {
             }
         });
 
+
         getUserInfoPost();
         getPost();
         getImage();
         readComments();
+
 
         return view;
     }
@@ -126,7 +129,9 @@ public class DiscusionFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 User user = snapshot.getValue(User.class);
+                Log.w("ESTADOoooo", "CARGA 1");
                 Glide.with(getActivity().getApplicationContext()).load(user.getImg()).into(image_profile);
+                Log.w("ESTADO", "CARGA 2");
             }
 
             @Override
@@ -158,14 +163,17 @@ public class DiscusionFragment extends Fragment {
         });
     }
 
+
     private void getUserInfoPost(){
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Usuarios").child(AuthorID);
-
+        Log.w("ESTADO", AuthorID);
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 User user = snapshot.getValue(User.class);
+                Log.w("ESTADO", "CARGA 1");
                 Glide.with(getActivity().getApplicationContext()).load(user.getImg()).into(image_profile);
+                Log.w("ESTADO", "CARGA 2");
                 username.setText(user.getUsuario());
             }
 

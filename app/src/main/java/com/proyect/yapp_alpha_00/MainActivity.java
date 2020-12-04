@@ -111,6 +111,7 @@ public class MainActivity extends AppCompatActivity {
             Log.w("Usuario", firebaseUser.getUid());
             editor.putString("profileID", firebaseUser.getUid());
             editor.putString("postID", postID);
+            editor.putString("authorID", autorID);
             editor.apply();
 
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new DiscusionFragment()).commit();

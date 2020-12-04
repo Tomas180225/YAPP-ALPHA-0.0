@@ -2,41 +2,34 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.proyect.yapp_alpha_00.Fragment.HomeFragment">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/bar"
-        android:background="?android:attr/windowBackground">
-
-    <androidx.appcompat.widget.Toolbar
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/toolbar"
-        android:background="?android:attr/windowBackground">
-
-    <ImageView
+    <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_search"/>
+        android:layout_height="match_parent"
+        android:layout_below="@+id/bar">
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/search_bar"
-        android:background="@color/transparent"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="10dp"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/recycler_view"/>
 
-    </androidx.appcompat.widget.Toolbar>
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:id="@+id/btn_upload"
+            android:tint="@color/white"
+            android:src="@drawable/ic_add"
+            app:maxImageSize="40dp"
+            android:background="@color/colorPrincipal"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="20dp"
+            android:layout_alignParentBottom="true"
+            android:padding="30dp"
+            android:layout_marginBottom="20dp"
+            android:contentDescription="TODO" />
 
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/bar"
-        android:id="@+id/recycler_view"/>
+    </RelativeLayout>
 
 </RelativeLayout>

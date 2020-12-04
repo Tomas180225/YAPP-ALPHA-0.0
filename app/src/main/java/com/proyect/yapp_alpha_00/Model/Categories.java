@@ -4,8 +4,9 @@ public class Categories {
 
     private String cName;
     private String cImage;
+    private boolean isChecked;
 
-    public Categories(String cName, String cImage) {
+    public Categories(String cName, String cImage, boolean isChecked) {
         this.cName = cName;
         this.cImage = cImage;
     }

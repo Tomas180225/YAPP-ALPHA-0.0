@@ -31,7 +31,6 @@ public class RegisterActivity extends AppCompatActivity {
 
     FirebaseAuth auth;
     DatabaseReference reference;
-    ProgressDialog pd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,9 +58,6 @@ public class RegisterActivity extends AppCompatActivity {
         registrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                pd = new ProgressDialog(RegisterActivity.this);
-                pd.setMessage("Danos un segundo");
-                pd.show();
 
                 String str_usuario = usuario.getText().toString().trim();
                 String str_nombre = nombre.getText().toString().trim();
@@ -73,59 +69,25 @@ public class RegisterActivity extends AppCompatActivity {
                 if(TextUtils.isEmpty(str_usuario) || TextUtils.isEmpty(str_nombre)
                         || TextUtils.isEmpty(str_telefono) || TextUtils.isEmpty(str_email)
                         || TextUtils.isEmpty(str_contraseña) || TextUtils.isEmpty(str_confirmar)){
-                    pd.dismiss();
                     Toast.makeText(RegisterActivity.this, "Todos los campos son obligatorios", Toast.LENGTH_SHORT).show();
                 }
                 else if(str_contraseña.length() < 8){
-                    pd.dismiss();
                     Toast.makeText(RegisterActivity.this, "Minimo 8 caracteres en la contraseña", Toast.LENGTH_SHORT).show();
                 }
                 else if(!str_contraseña.equals(str_confirmar)){
-                    pd.dismiss();
                     Toast.makeText(RegisterActivity.this, "Las contraseñas no coinciden", Toast.LENGTH_SHORT).show();
                 }
                 else{
-                    Registrar(str_usuario, str_nombre, str_telefono, str_email, str_contraseña);
+                    Intent intent = new Intent(RegisterActivity.this, SurveyActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra("usuario", str_usuario);
+                    intent.putExtra("nombre", str_nombre);
+                    intent.putExtra("telefono", str_telefono);
+                    intent.putExtra("email", str_email);
+                    intent.putExtra("contraseña", str_contraseña);
+                    startActivity(intent);
                 }
             }
         });
-    }
-    private void Registrar(String usuario, String nombre, String telefono, String email, String contraseña){
-        auth.createUserWithEmailAndPassword(email, contraseña)
-                .addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()){
-                            FirebaseUser firebaseUser = auth.getCurrentUser();
-                            String userId = firebaseUser.getUid();
-
-                            reference = FirebaseDatabase.getInstance().getReference().child("Usuarios").child(userId);
-
-                            HashMap<String, Object> hashmap = new HashMap<>();
-                            hashmap.put("id", userId);
-                            hashmap.put("usuario", usuario.toLowerCase());
-                            hashmap.put("nombre", nombre);
-                            hashmap.put("telefono", telefono);
-                            hashmap.put("bio", "");
-                            hashmap.put("img", "https://firebasestorage.googleapis.com/v0/b/yapp-beta.appspot.com/o/usuario.png?alt=media&token=b3fb065b-ed83-4259-96a4-3cf6d31b4f3c");
-
-                            reference.setValue(hashmap).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if(task.isSuccessful()){
-                                        pd.dismiss();
-                                        Intent intent = new Intent(RegisterActivity.this, SurveyActivity.class);
-                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                        startActivity(intent);
-                                    }
-                                }
-                            });
-                        }
-                        else{
-                            pd.dismiss();
-                            Toast.makeText(RegisterActivity.this, "Usuario ya registrado", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
     }
 }

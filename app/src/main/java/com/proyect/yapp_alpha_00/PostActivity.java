@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -95,12 +96,7 @@ public class PostActivity extends AppCompatActivity {
             }
         });
 
-        Log.w("Estado", "Finishing OnCreate");
-
         CropImage.activity().setAspectRatio(1,1).start(PostActivity.this);
-
-        Log.w("Estado", "Finish OnCreate");
-
     }
 
     private String getFileExtension(Uri uri){
@@ -110,59 +106,70 @@ public class PostActivity extends AppCompatActivity {
     }
 
     private void uploadImage(){
-        ProgressDialog progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Estamos publicando tu noticia");
-        progressDialog.show();
-
-        if(imameUri != null){
-            StorageReference fileReference = storageReference.child(System.currentTimeMillis() + "," + getFileExtension(imameUri));
-
-            uploadTask = fileReference.putFile(imameUri);
-            uploadTask.continueWithTask(new Continuation() {
-                @Override
-                public Object then(@NonNull Task task) throws Exception {
-                    if(!task.isComplete()){
-                        throw task.getException();
-                    }
-                    return fileReference.getDownloadUrl();
-                }
-            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-                @Override
-                public void onComplete(@NonNull Task<Uri> task) {
-                    if(task.isSuccessful()){
-                        Uri downloadUri = task.getResult();
-                        myUrk = downloadUri.toString();
-
-                        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("publicaciones");
-                        String postID = reference.push().getKey();
-
-                        HashMap<String, Object> hashMap = new HashMap<>();
-                        hashMap.put("postid", postID);
-                        hashMap.put("postimg", myUrk);
-                        hashMap.put("posttitulo", title.getText().toString());
-                        hashMap.put("descripcion", description.getText().toString());
-                        hashMap.put("usuario", FirebaseAuth.getInstance().getCurrentUser().getUid());
-
-                        reference.child(postID).setValue(hashMap);
-
-                        progressDialog.dismiss();
-
-                        startActivity(new Intent(PostActivity.this, MainActivity.class));
-                        finish();
-                    }
-                    else{
-                        Toast.makeText(PostActivity.this, "Algo salio mal :(", Toast.LENGTH_SHORT);
-                    }
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(PostActivity.this, e.getMessage(), Toast.LENGTH_SHORT);
-                }
-            });
+        SharedPreferences preferences = getSharedPreferences("SELECTED", MODE_PRIVATE);
+        String categoria = preferences.getString("cName", "none");
+        if(categoria == "none"){
+            Toast.makeText(PostActivity.this, "Debes seleccionar una categoria", Toast.LENGTH_SHORT).show();
         }
-        else{
-            Toast.makeText(PostActivity.this, "No hay imagen :(", Toast.LENGTH_SHORT);
+        else {
+            ProgressDialog progressDialog = new ProgressDialog(this);
+            progressDialog.setMessage("Estamos publicando tu noticia");
+            progressDialog.show();
+
+            if (imameUri != null) {
+                StorageReference fileReference = storageReference.child(System.currentTimeMillis() + "," + getFileExtension(imameUri));
+
+                uploadTask = fileReference.putFile(imameUri);
+                uploadTask.continueWithTask(new Continuation() {
+                    @Override
+                    public Object then(@NonNull Task task) throws Exception {
+                        if (!task.isComplete()) {
+                            throw task.getException();
+                        }
+                        return fileReference.getDownloadUrl();
+                    }
+                }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Uri> task) {
+                        if (task.isSuccessful()) {
+                            Uri downloadUri = task.getResult();
+                            myUrk = downloadUri.toString();
+
+                            DatabaseReference reference = FirebaseDatabase.getInstance().getReference("publicaciones");
+                            String postID = reference.push().getKey();
+
+                            SharedPreferences preferences = getSharedPreferences("SELECTED", MODE_PRIVATE);
+                            String category = preferences.getString("cName", "none");
+
+                            HashMap<String, Object> hashMap = new HashMap<>();
+                            hashMap.put("postid", postID);
+                            hashMap.put("postimg", myUrk);
+                            hashMap.put("posttitulo", title.getText().toString());
+                            hashMap.put("descripcion", description.getText().toString());
+                            hashMap.put("usuario", FirebaseAuth.getInstance().getCurrentUser().getUid());
+                            hashMap.put("categoria", category);
+
+                            reference.child(postID).setValue(hashMap);
+
+                            progressDialog.dismiss();
+
+                            startActivity(new Intent(PostActivity.this, MainActivity.class));
+                            finish();
+                        } else {
+                            Toast.makeText(PostActivity.this, "Algo salio mal :(", Toast.LENGTH_SHORT);
+                        }
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(PostActivity.this, e.getMessage(), Toast.LENGTH_SHORT);
+                    }
+                });
+            } else {
+                Toast.makeText(PostActivity.this, "No hay imagen :(", Toast.LENGTH_SHORT);
+            }
+
+
         }
     }
 
@@ -192,6 +199,7 @@ public class PostActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 categorias.clear();
                 for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+                    Log.w("CATEGORIAS", dataSnapshot.getValue().toString());
                     Categories categorie = dataSnapshot.getValue(Categories.class);
                     categorias.add(categorie);
                 }

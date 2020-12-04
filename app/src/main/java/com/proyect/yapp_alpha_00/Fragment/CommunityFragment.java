@@ -74,7 +74,6 @@ public class CommunityFragment extends Fragment {
                 followingList.clear();
                 for(DataSnapshot snapshot1 : snapshot.getChildren()) {
                     followingList.add(snapshot1.getKey());
-                    Log.w("Estado","Bien");
                 }
                 readPosts();
             }
@@ -97,9 +96,8 @@ public class CommunityFragment extends Fragment {
                 for(DataSnapshot datasnapshot : snapshot.getChildren()){
                     Post post = datasnapshot.getValue(Post.class);
                     for(String id: followingList) {
-                        if(post.getUsuario().equals(id)) {
+                        if(post.getCategoria().equals(id)) {
                             postList.add(post);
-                            Log.w("Estado","Bien");
                         }
                     }
                 }

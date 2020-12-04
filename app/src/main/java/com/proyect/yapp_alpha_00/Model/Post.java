@@ -7,17 +7,27 @@ public class Post {
     private String usuario;
     private String posttitulo;
     private String descripcion;
+    private String categoria;
 
-    public Post(String postid, String postimg, String usuario, String posttitulo, String descripcion) {
+    public Post(String postid, String postimg, String usuario, String posttitulo, String descripcion, String categoria) {
         this.postid = postid;
         this.postimg = postimg;
         this.usuario = usuario;
         this.posttitulo = posttitulo;
         this.descripcion = descripcion;
+        this.categoria = categoria;
     }
 
     public Post(){
 
+    }
+
+    public String getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
     }
 
     public String getPostid() {

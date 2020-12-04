@@ -58,11 +58,9 @@
             android:textAlignment="center"
             android:id="@+id/done"
             android:tint="@color/white"
-            android:src="@drawable/ic_add"
-            app:maxImageSize="40dp"
+            android:src="@drawable/ic_done"
             android:background="@drawable/button_background"
-            android:layout_marginEnd="20dp"
-            android:padding="30dp"
+            android:padding="0dp"
             android:layout_marginBottom="40dp"/>
 
     </LinearLayout>

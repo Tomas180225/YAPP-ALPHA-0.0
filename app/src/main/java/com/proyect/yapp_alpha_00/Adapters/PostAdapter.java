@@ -73,6 +73,22 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
         AuthorInformation(holder.image_profile, holder.username, post.getUsuario());
 
         getComments(post.getPostid(), holder.comments);
+        isSaved(post.getPostid(), holder.save);
+        getCategory(post.getCategoria(), holder.category);
+
+        holder.save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(holder.save.getTag().equals("save")){
+                    FirebaseDatabase.getInstance().getReference().child("guardados")
+                            .child(firebaseUser.getUid()).child(post.getPostid()).setValue(true);
+                }
+                else{
+                    FirebaseDatabase.getInstance().getReference().child("guardados")
+                            .child(firebaseUser.getUid()).child(post.getPostid()).removeValue();
+                }
+            }
+        });
 
         holder.comment.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,6 +96,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
                 Intent intent = new Intent(mContext, MainActivity.class);
                 intent.putExtra("postID", post.getPostid());
                 intent.putExtra("authorID", post.getUsuario());
+                Log.w("ESTADOc", post.getUsuario());
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 mContext.startActivity(intent);
             }
@@ -91,6 +108,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
                 Intent intent = new Intent(mContext, MainActivity.class);
                 intent.putExtra("postID", post.getPostid());
                 intent.putExtra("authorID", post.getUsuario());
+                Log.w("ESTADOc", post.getUsuario());
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 mContext.startActivity(intent);
             }
@@ -104,8 +122,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
 
     public class ViewHolder extends RecyclerView.ViewHolder{
 
-        public ImageView image_profile, post_image, comment, save;
-        public TextView username, author, title,description, comments;
+        public ImageView image_profile, post_image, comment, save, category;
+        public TextView username, title,description, comments;
 
         public ViewHolder(@NonNull View itemView){
             super(itemView);
@@ -118,6 +136,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
             title = itemView.findViewById(R.id.title);
             description = itemView.findViewById(R.id.description);
             comments = itemView.findViewById(R.id.comments);
+            category = itemView.findViewById(R.id.category);
         }
 
     }
@@ -156,5 +175,47 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
         });
     }
 
+    private void isSaved(final String postID, ImageView imageView){
+
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("guardados").child(firebaseUser.getUid());
+
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.child(postID).exists()){
+                    imageView.setImageResource(R.drawable.ic_saved);
+                    imageView.setTag("saved");
+                }
+                else{
+                    imageView.setImageResource(R.drawable.ic_save);
+                    imageView.setTag("save");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+    }
+    private void getCategory(String categoria, ImageView category){
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("categorias").child(categoria);
+
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String img = snapshot.child("cImage").getValue().toString();
+                Glide.with(mContext).load(img).into(category);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
 
 }

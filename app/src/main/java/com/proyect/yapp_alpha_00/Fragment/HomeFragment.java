@@ -41,38 +41,11 @@ public class HomeFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        recyclerView = view.findViewById(R.id.recycler_view);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
-        search_bar = view.findViewById(R.id.search_bar);
-
-        mUser = new ArrayList<>();
-        userAdapter = new UserAdapter(getContext(), mUser);
-        recyclerView.setAdapter(userAdapter);
-
-        readUsers();
-        search_bar.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                searchUser(s.toString().toLowerCase());
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
         return view;
 
     }
 
+    /*
     private void searchUser(String s){
         Query query = FirebaseDatabase.getInstance().getReference("Usuarios").orderByChild("usuario").startAt(s).endAt(s+"\uf8ff");
 
@@ -116,4 +89,5 @@ public class HomeFragment extends Fragment {
             }
         });
     }
+    */
 }
