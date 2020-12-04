@@ -93,11 +93,13 @@ public class CommunityFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 postList.clear();
-                for(DataSnapshot datasnapshot : snapshot.getChildren()){
-                    Post post = datasnapshot.getValue(Post.class);
-                    for(String id: followingList) {
-                        if(post.getCategoria().equals(id)) {
-                            postList.add(post);
+                for(DataSnapshot datasnapshot : snapshot.getChildren()) {
+                    if(!datasnapshot.child("publicador oficial").exists()) {
+                        Post post = datasnapshot.getValue(Post.class);
+                        for (String id : followingList) {
+                            if (post.getCategoria().equals(id)) {
+                                postList.add(post);
+                            }
                         }
                     }
                 }

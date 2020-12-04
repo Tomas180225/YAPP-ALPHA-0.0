@@ -27,6 +27,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -53,6 +54,7 @@ public class PostActivity extends AppCompatActivity {
     StorageTask uploadTask;
     StorageReference storageReference;
     CategoriesAdapter categoriesAdapter;
+    FirebaseUser firebaseUser;
 
     ImageView close, image_added;
     TextView post;
@@ -132,29 +134,70 @@ public class PostActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<Uri> task) {
                         if (task.isSuccessful()) {
-                            Uri downloadUri = task.getResult();
-                            myUrk = downloadUri.toString();
+                            firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+                            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Usuarios").child(firebaseUser.getUid());
+                            databaseReference.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    if(snapshot.child("publicador oficial").exists()){
+                                        Uri downloadUri = task.getResult();
+                                        myUrk = downloadUri.toString();
 
-                            DatabaseReference reference = FirebaseDatabase.getInstance().getReference("publicaciones");
-                            String postID = reference.push().getKey();
+                                        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("publicaciones");
+                                        String postID = reference.push().getKey();
 
-                            SharedPreferences preferences = getSharedPreferences("SELECTED", MODE_PRIVATE);
-                            String category = preferences.getString("cName", "none");
+                                        SharedPreferences preferences = getSharedPreferences("SELECTED", MODE_PRIVATE);
+                                        String category = preferences.getString("cName", "none");
 
-                            HashMap<String, Object> hashMap = new HashMap<>();
-                            hashMap.put("postid", postID);
-                            hashMap.put("postimg", myUrk);
-                            hashMap.put("posttitulo", title.getText().toString());
-                            hashMap.put("descripcion", description.getText().toString());
-                            hashMap.put("usuario", FirebaseAuth.getInstance().getCurrentUser().getUid());
-                            hashMap.put("categoria", category);
+                                        HashMap<String, Object> hashMap = new HashMap<>();
+                                        hashMap.put("postid", postID);
+                                        hashMap.put("postimg", myUrk);
+                                        hashMap.put("posttitulo", title.getText().toString());
+                                        hashMap.put("descripcion", description.getText().toString());
+                                        hashMap.put("usuario", FirebaseAuth.getInstance().getCurrentUser().getUid());
+                                        hashMap.put("categoria", category);
+                                        hashMap.put("publicador oficial", true);
 
-                            reference.child(postID).setValue(hashMap);
+                                        reference.child(postID).setValue(hashMap);
 
-                            progressDialog.dismiss();
+                                        progressDialog.dismiss();
 
-                            startActivity(new Intent(PostActivity.this, MainActivity.class));
-                            finish();
+                                        startActivity(new Intent(PostActivity.this, MainActivity.class));
+                                        finish();
+                                    }
+                                    else{
+                                        Uri downloadUri = task.getResult();
+                                        myUrk = downloadUri.toString();
+
+                                        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("publicaciones");
+                                        String postID = reference.push().getKey();
+
+                                        SharedPreferences preferences = getSharedPreferences("SELECTED", MODE_PRIVATE);
+                                        String category = preferences.getString("cName", "none");
+
+                                        HashMap<String, Object> hashMap = new HashMap<>();
+                                        hashMap.put("postid", postID);
+                                        hashMap.put("postimg", myUrk);
+                                        hashMap.put("posttitulo", title.getText().toString());
+                                        hashMap.put("descripcion", description.getText().toString());
+                                        hashMap.put("usuario", FirebaseAuth.getInstance().getCurrentUser().getUid());
+                                        hashMap.put("categoria", category);
+
+                                        reference.child(postID).setValue(hashMap);
+
+                                        progressDialog.dismiss();
+
+                                        startActivity(new Intent(PostActivity.this, MainActivity.class));
+                                        finish();
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+
+                                }
+                            });
+
                         } else {
                             Toast.makeText(PostActivity.this, "Algo salio mal :(", Toast.LENGTH_SHORT);
                         }

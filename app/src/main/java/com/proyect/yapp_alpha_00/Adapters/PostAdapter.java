@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -36,6 +37,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
 
     public Context mContext;
     public List<Post> mPost;
+    ImageButton publicador;
 
     private FirebaseUser firebaseUser;
 
@@ -59,10 +61,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
         if(post.getDescripcion().equals("")){
             holder.description.setVisibility(View.GONE);
         }
-        else if(post.getDescripcion().length() > 165){
+        else if(post.getDescripcion().length() > 130){
             holder.title.setText(post.getPosttitulo());
             holder.description.setVisibility(View.VISIBLE);
-            holder.description.setText(post.getDescripcion().substring(0, 165) + "...");
+            holder.description.setText(post.getDescripcion().substring(0, 130) + "...");
         }
         else{
             holder.title.setText(post.getPosttitulo());
@@ -137,6 +139,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
             description = itemView.findViewById(R.id.description);
             comments = itemView.findViewById(R.id.comments);
             category = itemView.findViewById(R.id.category);
+            publicador = itemView.findViewById(R.id.publicador);
+
+            publicador.setVisibility(View.GONE);
         }
 
     }
@@ -163,6 +168,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.child("publicador oficial").exists()){
+                    publicador.setVisibility(View.VISIBLE);
+                }
                 User user = snapshot.getValue(User.class);
                 Glide.with(mContext).load(user.getImg()).into(image_profile);
                 username.setText(user.getUsuario());
