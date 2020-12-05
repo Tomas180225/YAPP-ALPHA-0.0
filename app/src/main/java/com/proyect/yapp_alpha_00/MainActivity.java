@@ -223,6 +223,28 @@ public class MainActivity extends AppCompatActivity {
                 User user = snapshot.getValue(User.class);
                 Glide.with(MainActivity.this).load(user.getImg()).into(profile_image_menu);
                 username_menu.setText(user.getUsuario());
+                categorias(user.getId());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void categorias(String id){
+        SharedPreferences.Editor editor = getSharedPreferences("CATEGORIAS", MODE_PRIVATE).edit();
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("seguir").child(id).child("siguiendo");
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                int numero = 0;
+                for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+                    numero += 1;
+                    editor.putString("categoria_"+String.valueOf(numero), dataSnapshot.getKey());
+                }
+                editor.apply();
             }
 
             @Override

@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -49,7 +50,7 @@ public class SurveyActivity extends AppCompatActivity {
     DatabaseReference reference;
     ProgressDialog pd;
 
-    private Button done;
+    private ImageButton done;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

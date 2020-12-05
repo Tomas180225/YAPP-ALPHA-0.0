@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".PostDetailsActiviy">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?android:attr/windowBackground"
+            android:id="@+id/bar"/>
+
+        <androidx.appcompat.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?android:attr/windowBackground"
+            android:id="@+id/toolbar">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:src="@drawable/ic_close"
+                    android:id="@+id/close"
+                    android:layout_centerVertical="true"/>
+
+                <ImageView
+                    android:id="@+id/logoAppBar"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginEnd="15dp"
+                    android:layout_alignParentEnd="true"
+                    android:src="@drawable/logo_yapp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"/>
+
+            </RelativeLayout>
+
+        </androidx.appcompat.widget.Toolbar>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/toolbar"
+            android:layout_above="@id/bottom_navigation_news">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="10dp"
+                    android:id="@+id/top_bar"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    android:background="?android:attr/windowBackground">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_margin="10dp"
+                        android:id="@+id/image_profile"
+                        android:src="@mipmap/ic_launcher"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/username"
+                        android:layout_gravity="center_vertical"
+                        android:textSize="16dp"
+                        android:textStyle="bold"
+                        android:textColor="@color/colortexto"
+                        android:layout_toEndOf="@id/image_profile"
+                        android:layout_centerVertical="true"
+                        android:text="usuario"/>
+
+                    <ImageButton
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_toEndOf="@id/username"
+                        android:id="@+id/publicador"
+                        android:textStyle="bold"
+                        android:background="@drawable/button_background"
+                        android:textColor="@color/white"
+                        android:src="@drawable/ic_baseline_done"
+                        android:padding="5dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_centerVertical="true"/>
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_margin="10dp"
+                        android:id="@+id/category"
+                        android:src="@mipmap/ic_launcher"
+                        android:layout_alignParentEnd="true"/>
+                </RelativeLayout>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/ic_launcher"
+                    android:layout_centerHorizontal="true"
+                    android:id="@+id/post_image"
+                    android:layout_below="@id/top_bar"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/post_image"
+                    android:id="@+id/post_title"
+                    android:text="TITULO"
+                    android:textColor="@color/colorPrincipal"
+                    android:fontFamily="sans-serif-condensed-light"
+                    android:textSize="18dp"
+                    android:textAlignment="center"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:padding="20dp"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/post_title"
+                    android:id="@+id/post_description"
+                    android:textColor="@color/colortexto"
+                    android:fontFamily="sans-serif-condensed-light"
+                    android:textSize="14dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:padding="20dp"
+                    android:layout_marginBottom="20dp"/>
+
+            </RelativeLayout>
+        </ScrollView>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/bottom_navigation_news"
+        app:labelVisibilityMode="unlabeled"
+        android:background="?android:attr/windowBackground"
+        app:menu="@menu/bottom_navigation_news"
+        app:itemTextColor="@color/nav_color"
+        android:layout_alignParentBottom="true"
+        app:itemIconTint="@color/nav_color"/>
+
+
+</RelativeLayout>

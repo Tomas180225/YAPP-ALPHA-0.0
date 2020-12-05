@@ -29,6 +29,7 @@ import com.proyect.yapp_alpha_00.Fragment.DiscusionFragment;
 import com.proyect.yapp_alpha_00.MainActivity;
 import com.proyect.yapp_alpha_00.Model.Post;
 import com.proyect.yapp_alpha_00.Model.User;
+import com.proyect.yapp_alpha_00.PostDetailsActiviy;
 import com.proyect.yapp_alpha_00.R;
 
 import java.util.List;
@@ -37,7 +38,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
 
     public Context mContext;
     public List<Post> mPost;
-    ImageButton publicador;
 
     private FirebaseUser firebaseUser;
 
@@ -72,7 +72,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
             holder.description.setText(post.getDescripcion());
         }
 
-        AuthorInformation(holder.image_profile, holder.username, post.getUsuario());
+        AuthorInformation(holder.image_profile, holder.username, post.getUsuario(), holder.publicador);
 
         getComments(post.getPostid(), holder.comments);
         isSaved(post.getPostid(), holder.save);
@@ -110,8 +110,37 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
                 Intent intent = new Intent(mContext, MainActivity.class);
                 intent.putExtra("postID", post.getPostid());
                 intent.putExtra("authorID", post.getUsuario());
-                Log.w("ESTADOc", post.getUsuario());
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                mContext.startActivity(intent);
+            }
+        });
+
+        holder.description.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, PostDetailsActiviy.class);
+                intent.putExtra("postID", post.getPostid());
+                intent.putExtra("authorID", post.getUsuario());
+                mContext.startActivity(intent);
+            }
+        });
+
+        holder.title.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, PostDetailsActiviy.class);
+                intent.putExtra("postID", post.getPostid());
+                intent.putExtra("authorID", post.getUsuario());
+                mContext.startActivity(intent);
+            }
+        });
+
+        holder.post_image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, PostDetailsActiviy.class);
+                intent.putExtra("postID", post.getPostid());
+                intent.putExtra("authorID", post.getUsuario());
                 mContext.startActivity(intent);
             }
         });
@@ -126,6 +155,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
 
         public ImageView image_profile, post_image, comment, save, category;
         public TextView username, title,description, comments;
+        private ImageButton publicador;
 
         public ViewHolder(@NonNull View itemView){
             super(itemView);
@@ -162,7 +192,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
         });
     }
 
-    private void AuthorInformation(final ImageView image_profile, final TextView username, final String userID){
+    private void AuthorInformation(final ImageView image_profile, final TextView username, final String userID, ImageButton publicador){
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Usuarios").child(userID);
 
         reference.addValueEventListener(new ValueEventListener() {

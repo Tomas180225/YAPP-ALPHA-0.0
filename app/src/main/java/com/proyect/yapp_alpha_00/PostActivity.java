@@ -71,6 +71,8 @@ public class PostActivity extends AppCompatActivity {
         post = findViewById(R.id.post);
         title = findViewById(R.id.title);
         description = findViewById(R.id.description);
+
+
         recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new GridLayoutManager(getApplicationContext(),3);
