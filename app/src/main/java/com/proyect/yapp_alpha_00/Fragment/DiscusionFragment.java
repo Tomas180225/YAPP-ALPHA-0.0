@@ -103,7 +103,6 @@ public class DiscusionFragment extends Fragment {
 
         getUserInfoPost();
         getPost();
-        getImage();
         readComments();
 
 
@@ -121,9 +120,9 @@ public class DiscusionFragment extends Fragment {
         addComment.setText("");
     }
 
-    private void getImage(){
+    private void getImage(String usuario){
 
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Usuarios").child(firebaseUser.getUid());
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Usuarios").child(usuario);
 
         reference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -199,6 +198,7 @@ public class DiscusionFragment extends Fragment {
                 else{
                     description.setText(post.getDescripcion());
                 }
+                getImage(post.getUsuario());
             }
 
             @Override

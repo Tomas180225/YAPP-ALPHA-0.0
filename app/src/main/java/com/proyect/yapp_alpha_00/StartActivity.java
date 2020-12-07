@@ -33,6 +33,7 @@ public class StartActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.Theme_YAPPALPHA00);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
 

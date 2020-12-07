@@ -46,11 +46,13 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.proyect.yapp_alpha_00.Adapters.CategoriesAdapter;
 import com.proyect.yapp_alpha_00.Adapters.CategoriesAdapterProfile;
+import com.proyect.yapp_alpha_00.CustomProfileActivity;
 import com.proyect.yapp_alpha_00.MainActivity;
 import com.proyect.yapp_alpha_00.Model.Categories;
 import com.proyect.yapp_alpha_00.Model.Post;
 import com.proyect.yapp_alpha_00.Model.User;
 import com.proyect.yapp_alpha_00.R;
+import com.proyect.yapp_alpha_00.StartActivity;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
@@ -66,10 +68,8 @@ import static android.app.Activity.RESULT_OK;
 public class ProfileFragment extends Fragment {
 
     ImageView image_profile, options;
-    EditText edit_name, edit_user, edit_cellphone;
     TextView name, username_p, username, cellphone, posts;
     Button button_edit;
-    ImageButton edit_photo;
     RecyclerView recyclerView;
     CategoriesAdapterProfile categoriesAdapter;
     List<Categories> mCategorias;
@@ -78,8 +78,6 @@ public class ProfileFragment extends Fragment {
     FirebaseUser firebaseUser;
     String profileID;
 
-    private Uri mImageUri;
-    private StorageTask uploadTask;
     StorageReference storageReference;
 
     @Override
@@ -104,14 +102,6 @@ public class ProfileFragment extends Fragment {
         button_edit = view.findViewById(R.id.button_edit);
         button_edit.setTag("editar");
 
-        edit_name = view.findViewById(R.id.edit_name);
-        edit_user = view.findViewById(R.id.edit_user);
-        edit_cellphone = view.findViewById(R.id.edit_cellphone);
-        edit_name.setVisibility(View.GONE);
-        edit_user.setVisibility(View.GONE);
-        edit_cellphone.setVisibility(View.GONE);
-        edit_photo = view.findViewById(R.id.edit_photo);
-
         recyclerView = view.findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
@@ -124,117 +114,14 @@ public class ProfileFragment extends Fragment {
         userInfo();
         getPosts();
 
-        edit_photo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                CropImage.activity().setAspectRatio(1,1).start(getActivity());
-            }
-        });
-
         button_edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(button_edit.getTag().equals("editando")){
-                    button_edit.setTag("editar");
-                    edit_name.setVisibility(View.GONE);
-                    edit_user.setVisibility(View.GONE);
-                    edit_cellphone.setVisibility(View.GONE);
-                    updateProfile(edit_user.getText().toString(), edit_name.getText().toString(), edit_cellphone.getText().toString());
-                }
-                else {
-                    edit_name.setVisibility(View.VISIBLE);
-                    edit_user.setVisibility(View.VISIBLE);
-                    edit_cellphone.setVisibility(View.VISIBLE);
-                    button_edit.setText("Listo!");
-                    button_edit.setTag("editando");
-                }
+                startActivity(new Intent(getContext(), CustomProfileActivity.class));
             }
         });
 
         return view;
-    }
-
-    private void updateProfile(String user, String name, String cellphone){
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Usuarios").child(firebaseUser.getUid());
-
-        HashMap<String, Object> hashMap = new HashMap<>();
-        hashMap.put("nombre", name);
-        hashMap.put("usuario", user);
-        hashMap.put("telefono", cellphone);
-
-        reference.updateChildren(hashMap);
-    }
-
-    private String getFileExtension(Uri uri){
-        ContentResolver contentResolver = getActivity().getContentResolver();
-        MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
-        return  mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri));
-    }
-
-    private void update_image(){
-        ProgressDialog pd = new ProgressDialog(getContext());
-        pd.setMessage("Subiendo");
-        pd.show();
-
-        if(mImageUri != null){
-            final StorageReference fileReference = storageReference.child(System.currentTimeMillis()+"."+getFileExtension(mImageUri));
-
-            uploadTask = fileReference.putFile(mImageUri);
-            uploadTask.continueWithTask(new Continuation() {
-                @Override
-                public Object then(@NonNull Task task) throws Exception {
-                    if(!task.isSuccessful()){
-                        throw task.getException();
-                    }
-
-                    return fileReference.getDownloadUrl();
-                }
-            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-                @Override
-                public void onComplete(@NonNull Task<Uri> task) {
-                    if(task.isSuccessful()){
-                        Uri downloarUri = task.getResult();
-                        String myURL = downloarUri.toString();
-
-                        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Usuarios").child(firebaseUser.getUid());
-
-                        HashMap<String, Object> hashMap = new HashMap<>();
-                        hashMap.put("img", myURL);
-
-                        reference.updateChildren(hashMap);
-
-                        pd.dismiss();
-                    }
-                    else {
-                        Toast.makeText(getActivity(),"Algo salio mal :(", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(getActivity(),e.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            });
-        }else{
-            Toast.makeText(getActivity(),"No hay imagen", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        Log.w("ESTADO cod", String.valueOf(requestCode));
-        if(requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == getActivity().RESULT_OK){
-            Log.w("ESTADO","SOUUUUUUUUUUUUUUUUUUUUUUUUUUU");
-            CropImage.ActivityResult result = CropImage.getActivityResult(data);
-            mImageUri = result.getUri();
-
-            update_image();
-        }
-        else{
-            Toast.makeText(getActivity(),"Algo salio mal :(", Toast.LENGTH_SHORT).show();
-        }
     }
 
     private void userInfo(){
@@ -312,10 +199,10 @@ public class ProfileFragment extends Fragment {
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                mCategorias.clear();
                 for(DataSnapshot dataSnapshot: snapshot.getChildren()){
                     Categories categorie = dataSnapshot.getValue(Categories.class);
                     for(String key: keys){
-                        Log.w("ESTADO LLAVE", key);
                         if(categorie.getcName().equals(key)){
                             mCategorias.add(categorie);
                         }

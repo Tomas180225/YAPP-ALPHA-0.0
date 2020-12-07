@@ -7,13 +7,13 @@
         android:title="@string/noticias"/>
 
     <item
-        android:id="@+id/nav_discusion"
-        android:icon="@drawable/ic_discusion"
-        android:title="@string/discusion"/>
-
-    <item
         android:id="@+id/nav_noticias"
         android:icon="@drawable/ic_community"
         android:title="@string/comunidad"/>
+
+    <item
+        android:id="@+id/nav_discusion"
+        android:icon="@drawable/ic_discusion"
+        android:title="@string/discusion"/>
 
 </menu>

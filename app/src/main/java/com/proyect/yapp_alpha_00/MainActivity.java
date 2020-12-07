@@ -190,10 +190,11 @@ public class MainActivity extends AppCompatActivity {
                 selectedFragment = new SavedFragment();
                 Toast.makeText(MainActivity.this, "Colecciones", Toast.LENGTH_SHORT).show();
                 break;
+                /*
             case R.id.navAjustes:
                 selectedFragment = new SettingsFragment();
                 Toast.makeText(MainActivity.this, "Ajustes", Toast.LENGTH_SHORT).show();
-                break;
+                break;*/
             case R.id.navCerrar:
                 FirebaseAuth.getInstance().signOut();
                 Toast.makeText(MainActivity.this, "Cerraste sesión", Toast.LENGTH_SHORT).show();

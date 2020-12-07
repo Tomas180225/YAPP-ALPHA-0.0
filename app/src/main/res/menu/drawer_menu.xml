@@ -12,11 +12,13 @@
         android:title="@string/guardados"
         android:icon="@drawable/ic_drawer_guardados"
         />
+    <!--
     <item
         android:id="@+id/navAjustes"
         android:title="@string/ajustes"
         android:icon="@drawable/ic_drawer_ajustes"
-        />
+        />-->
+
     <item
         android:id="@+id/navCerrar"
         android:title="@string/cerrar_sesión"
