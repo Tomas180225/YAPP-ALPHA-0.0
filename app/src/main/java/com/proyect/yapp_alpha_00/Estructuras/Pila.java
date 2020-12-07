@@ -1,11 +1,13 @@
 package com.proyect.yapp_alpha_00.Estructuras;
 
-public class Pila<T> {
+import android.util.Log;
+
+public class Pila<Post> {
 
     public int size;
 
     class Nodo {
-        T info;
+        Post info;
         Nodo sig;
     }
 
@@ -16,7 +18,7 @@ public class Pila<T> {
         size = 0;
     }
 
-    public void push(T x) {
+    public void push(Post x) {
         Nodo nuevo;
         nuevo = new Nodo();
         nuevo.info = x;
@@ -33,9 +35,9 @@ public class Pila<T> {
         }
     }
 
-    public T pop(){
+    public Post pop(){
         if (raiz!=null){
-            T informacion = raiz.info;
+            Post informacion = raiz.info;
             raiz = raiz.sig;
             size -= 1;
             return informacion;
@@ -55,10 +57,10 @@ public class Pila<T> {
         }
     }
 
-    public T peek(){
+    public Post peek(){
         Nodo reco=raiz;
         if(reco==null){
-            System.out.print("no puedes sacar elementos de una pila vacía");
+            Log.w("Error", "No puedes sacar elementos de una pila vacia");
         }
         return reco.info;
 
