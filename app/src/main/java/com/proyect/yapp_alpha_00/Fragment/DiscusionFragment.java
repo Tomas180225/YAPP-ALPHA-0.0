@@ -59,11 +59,19 @@ public class DiscusionFragment extends Fragment {
 
     FirebaseUser firebaseUser;
 
+    Context mContext;
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        mContext = context;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view =  inflater.inflate(R.layout.fragment_discusion, container, false);
+        View view = inflater.inflate(R.layout.fragment_discusion, container, false);
 
         recyclerView = view.findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
@@ -129,7 +137,10 @@ public class DiscusionFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 User user = snapshot.getValue(User.class);
                 Log.w("ESTADOoooo", "CARGA 1");
+
                 Glide.with(getActivity().getApplicationContext()).load(user.getImg()).into(image_profile);
+
+
                 Log.w("ESTADO", "CARGA 2");
             }
 

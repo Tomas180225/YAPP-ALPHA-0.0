@@ -19,7 +19,6 @@ public class Post {
         this.categoria = categoria;
         this.fecha = fecha;
     }
-
     public Post(){
 
     }
