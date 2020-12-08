@@ -14,7 +14,8 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="200dp"
+            android:background="@drawable/menu_header_back"
             android:gravity="center">
 
             <de.hdodenhof.circleimageview.CircleImageView
@@ -23,7 +24,7 @@
                 android:src="@drawable/usuario"
                 android:layout_marginTop="50dp"
                 android:id="@+id/image_profile"
-                android:layout_gravity="center"/>
+                android:layout_gravity="center" />
 
 
         </RelativeLayout>

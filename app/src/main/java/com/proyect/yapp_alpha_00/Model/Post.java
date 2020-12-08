@@ -17,7 +17,6 @@ public class Post {
         this.descripcion = descripcion;
         this.categoria = categoria;
     }
-
     public Post(){
 
     }
