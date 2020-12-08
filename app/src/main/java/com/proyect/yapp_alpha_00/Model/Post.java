@@ -8,18 +8,28 @@ public class Post {
     private String posttitulo;
     private String descripcion;
     private String categoria;
+    private String fecha;
 
-    public Post(String postid, String postimg, String usuario, String posttitulo, String descripcion, String categoria) {
+    public Post(String postid, String postimg, String usuario, String posttitulo, String descripcion, String categoria, String fecha) {
         this.postid = postid;
         this.postimg = postimg;
         this.usuario = usuario;
         this.posttitulo = posttitulo;
         this.descripcion = descripcion;
         this.categoria = categoria;
+        this.fecha = fecha;
     }
 
     public Post(){
 
+    }
+
+    public String getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(String fecha) {
+        this.fecha = fecha;
     }
 
     public String getCategoria() {

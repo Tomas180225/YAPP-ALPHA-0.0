@@ -40,8 +40,10 @@ import com.proyect.yapp_alpha_00.Adapters.CategoriesAdapter;
 import com.proyect.yapp_alpha_00.Model.Categories;
 import com.theartofdev.edmodo.cropper.CropImage;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -148,6 +150,10 @@ public class PostActivity extends AppCompatActivity {
                                         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("publicaciones");
                                         String postID = reference.push().getKey();
 
+                                        SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd");
+                                        Date date = new Date(System.currentTimeMillis());
+                                        String currentDate = formatter.format(date);
+
                                         SharedPreferences preferences = getSharedPreferences("SELECTED", MODE_PRIVATE);
                                         String category = preferences.getString("cName", "none");
 
@@ -159,6 +165,7 @@ public class PostActivity extends AppCompatActivity {
                                         hashMap.put("usuario", FirebaseAuth.getInstance().getCurrentUser().getUid());
                                         hashMap.put("categoria", category);
                                         hashMap.put("publicador oficial", true);
+                                        hashMap.put("fecha", currentDate);
 
                                         reference.child(postID).setValue(hashMap);
 
@@ -177,6 +184,10 @@ public class PostActivity extends AppCompatActivity {
                                         SharedPreferences preferences = getSharedPreferences("SELECTED", MODE_PRIVATE);
                                         String category = preferences.getString("cName", "none");
 
+                                        SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd");
+                                        Date date = new Date(System.currentTimeMillis());
+                                        String currentDate = formatter.format(date);
+
                                         HashMap<String, Object> hashMap = new HashMap<>();
                                         hashMap.put("postid", postID);
                                         hashMap.put("postimg", myUrk);
@@ -184,6 +195,7 @@ public class PostActivity extends AppCompatActivity {
                                         hashMap.put("descripcion", description.getText().toString());
                                         hashMap.put("usuario", FirebaseAuth.getInstance().getCurrentUser().getUid());
                                         hashMap.put("categoria", category);
+                                        hashMap.put("fecha", currentDate);
 
                                         reference.child(postID).setValue(hashMap);
 
@@ -244,7 +256,6 @@ public class PostActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 categorias.clear();
                 for(DataSnapshot dataSnapshot : snapshot.getChildren()){
-                    Log.w("CATEGORIAS", dataSnapshot.getValue().toString());
                     Categories categorie = dataSnapshot.getValue(Categories.class);
                     categorias.add(categorie);
                 }

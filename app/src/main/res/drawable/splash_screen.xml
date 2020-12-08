@@ -4,7 +4,7 @@
     <item android:drawable="@color/white" />
     <item>
         <bitmap android:src="@drawable/logo_yapp_splash"
-            android:gravity="center"/>
+            android:gravity="center" />
     </item>
 
 </layer-list>
