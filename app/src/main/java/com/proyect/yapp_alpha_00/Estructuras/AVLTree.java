@@ -105,28 +105,18 @@ public class AVLTree{
 
         if (balance > 1 && data2.compareTo(nodo.left.data2) < 0){
             if(nodo.left.data2 != null) {
-                Log.w("COMPARACION", data2 + " es menor que " + nodo.left.data2);
             }
             return rotarDerecha(nodo);
         }
         if (balance < -1 && data2.compareTo(nodo.right.data2) > 0){
-            if(nodo.right.data2 != null) {
-                Log.w("COMPARACION", data2 + " es mayor que " + nodo.right.data2);
-            }
             return rotarIzquierda(nodo);
         }
         if (balance > 1 && data2.compareTo(nodo.left.data2) > 0) {
-            if(nodo.left.data2 != null) {
-                Log.w("COMPARACION", data2 + " es mayor que " + nodo.left.data2);
-            }
             nodo.left = rotarIzquierda(nodo.left);
             return rotarDerecha(nodo);
         }
 
         if (balance < -1 && data2.compareTo(nodo.right.data2) < 0) {
-            if(nodo.right.data2 != null) {
-                Log.w("COMPARACION", data2 + " es menor que " + nodo.right.data2);
-            }
             nodo.right = rotarDerecha(nodo.right);
             return rotarIzquierda(nodo);
         }
@@ -174,21 +164,22 @@ public class AVLTree{
         return cont;
     }
 
-    public int Find(Nodo nodo, String palabra) {
-        int cont = 0;
+    public void Find(Nodo nodo, String palabra) {
         if (nodo != null) {
             if(nodo.data2.equals(palabra)){
-                cont = nodo.number;
+                listPosts.add(nodo.data);
+                if(nodo.right != null){
+                    Find(nodo.right, palabra);
+                }
             }
-            else if(palabra.compareTo(nodo.data2) < 0){
-                cont += Find(nodo.left, palabra);
+            else if(palabra.compareTo(nodo.data2) < 0 && nodo.left != null){
+                Find(nodo.left, palabra);
             }
-            else{
-                cont += Find(nodo.right, palabra);
+            else if(nodo.right != null){
+                Find(nodo.right, palabra);
             }
 
         }
-        return cont;
     }
 
     public String FindMin(Nodo nodo) {

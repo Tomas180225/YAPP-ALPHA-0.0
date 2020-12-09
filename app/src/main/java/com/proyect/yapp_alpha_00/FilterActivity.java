@@ -63,8 +63,6 @@ public class FilterActivity extends AppCompatActivity {
         filtros.clear();
         filtros.apply();
 
-
-
         mas_antiguo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

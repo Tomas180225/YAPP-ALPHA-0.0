@@ -1,6 +1,7 @@
 package com.proyect.yapp_alpha_00.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -8,11 +9,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.proyect.yapp_alpha_00.FilterActivity;
+import com.proyect.yapp_alpha_00.MainActivity;
 import com.proyect.yapp_alpha_00.Model.Categories;
 import com.proyect.yapp_alpha_00.R;
 
@@ -22,12 +26,10 @@ public class CategoriesAdapterFilters extends RecyclerView.Adapter<CategoriesAda
 
     private Context mContext;
     private List<Categories> categories;
-    SharedPreferences.Editor sharedPreferences;
 
     public CategoriesAdapterFilters(Context context, List<Categories> categories){
         this.mContext = context;
         this.categories = categories;
-        Log.w("ESTADO", "ADAPTER");
     }
 
     @NonNull
@@ -51,8 +53,13 @@ public class CategoriesAdapterFilters extends RecyclerView.Adapter<CategoriesAda
         holder.category_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sharedPreferences.putString("categoria", categoriesList.getcName());
-                sharedPreferences.apply();
+                SharedPreferences sharedPreferences = mContext.getSharedPreferences("FILTROS", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.clear();
+                editor.putString("aplicar", categoriesList.getcName());
+                editor.apply();
+                Toast.makeText(mContext, "Noticias de "+categoriesList.getcName(), Toast.LENGTH_SHORT).show();
+                mContext.startActivity(new Intent(mContext, MainActivity.class));
             }
         });
 
@@ -73,7 +80,6 @@ public class CategoriesAdapterFilters extends RecyclerView.Adapter<CategoriesAda
 
             category_image = itemView.findViewById(R.id.category_image);
             category_text = itemView.findViewById(R.id.category_text);
-            sharedPreferences = mContext.getSharedPreferences("FILTRO_CATEGORIA", Context.MODE_PRIVATE).edit();
         }
 
     }

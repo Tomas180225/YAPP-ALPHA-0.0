@@ -134,6 +134,9 @@ public class HomeFragment extends Fragment {
                                         String insertFecha = post.getFecha().substring(0,4)+post.getFecha().substring(5,7)+post.getFecha().substring(8);
                                         avl.root = avl.insert(avl.root, post, insertFecha);
                                     }
+                                    else if(post.getCategoria().equals(filtrar)){
+                                        postList.add(post);
+                                    }
                                 }
                                 else {
                                     postList.add(post);
