@@ -111,6 +111,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
                 Intent intent = new Intent(mContext, MainActivity.class);
                 intent.putExtra("postID", post.getPostid());
                 intent.putExtra("authorID", post.getUsuario());
+                intent.putExtra("fragmento", "discusion");
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 mContext.startActivity(intent);
             }

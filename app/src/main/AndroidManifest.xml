@@ -13,18 +13,20 @@
         android:roundIcon="@mipmap/ic_icon_yapp_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".CustomProfileActivity"></activity>
+        <activity android:name=".FilterActivity"></activity>
+        <activity android:name=".CustomProfileActivity" />
         <activity android:name=".PostDetailsActiviy" />
         <activity android:name=".CommentActivity" />
         <activity android:name=".SurveyActivity" />
         <activity android:name=".PostActivity" />
         <activity android:name=".MainActivity" />
         <activity android:name=".RegisterActivity" />
-        <activity android:name=".LoginActivity"/>
+        <activity android:name=".LoginActivity" />
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />
-        <activity android:name=".StartActivity"
+        <activity
+            android:name=".StartActivity"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

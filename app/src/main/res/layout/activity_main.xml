@@ -25,11 +25,21 @@
                 android:id="@+id/toolbar_content">
                 <androidx.appcompat.widget.SearchView
                     android:id="@+id/top_search"
-                    android:layout_width="220dp"
+                    android:layout_width="150dp"
+                    android:layout_marginStart="0dp"
                     android:layout_height="wrap_content"
                     android:background="@color/transparent"
-                    android:layout_toStartOf="@id/filtro"
                     android:gravity="start"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toStartOf="@id/filtro"
+                    android:text="sin filtros"
+                    android:textColor="@color/colorPrincipal"
+                    android:layout_centerVertical="true"
+                    android:fontFamily="sans-serif-condensed-light"
+                    android:id="@+id/filtro_activo"/>
+
                 <ImageButton
                     android:id="@+id/filtro"
                     android:scaleType="fitCenter"

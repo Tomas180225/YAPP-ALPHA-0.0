@@ -15,8 +15,8 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:background="@drawable/menu_header_back"
             android:gravity="center">
+            <!--android:background="@drawable/menu_header_back"-->
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:layout_width="100dp"

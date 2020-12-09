@@ -46,8 +46,8 @@ public class MainActivity extends AppCompatActivity {
     BottomNavigationView bottomNavigationView;
     int MenuBottomId;
     int MenuDrawerId;
-    ImageView profile_image_menu;
-    TextView username_menu;
+    ImageView profile_image_menu, filtro;
+    TextView username_menu, filtro_activo;
     Fragment selectedFragment = null;
 
     EditText addComment;
@@ -76,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
         });
         profile_image_menu = navHeader.findViewById(R.id.profile_image_menu);
         username_menu = navHeader.findViewById(R.id.username_menu);
+        filtro_activo = findViewById(R.id.filtro_activo);
 
 
         //Hamburguer icon
@@ -99,12 +100,25 @@ public class MainActivity extends AppCompatActivity {
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
+        SharedPreferences filtros = getSharedPreferences("FILTROS", MODE_PRIVATE);
+        String filter = filtros.getString("aplicar", "none");
+        if(!filter.equals("none")){
+            filtro_activo.setText(filter);
+        }
+
+        SharedPreferences.Editor aplicarFiltro = getSharedPreferences("APLICARFILTRO", MODE_PRIVATE).edit();
+        aplicarFiltro.clear();
+        aplicarFiltro.apply();
+
         userInfo();
 
         Bundle intent = getIntent().getExtras();
+
+
         if(intent != null){
             String autorID = intent.getString("authorID");
             String postID = intent.getString("postID");
+            String fragmento = intent.getString("fragmento");
 
             SharedPreferences.Editor editor = getSharedPreferences("PREFS", MODE_PRIVATE).edit();
 
@@ -127,6 +141,19 @@ public class MainActivity extends AppCompatActivity {
 
 
         buscar = findViewById(R.id.top_search);
+        filtro = findViewById(R.id.filtro);
+
+        filtro.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, FilterActivity.class));
+
+                if(!filter.equals("none")){
+                    aplicarFiltro.putString("filtro", filter);
+                    aplicarFiltro.apply();
+                }
+            }
+        });
 
         /*
         buscar.setOnClickListener(new View.OnClickListener() {
@@ -144,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
             new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
                 public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
+                    String selected = null;
                     MenuBottomId = item.getItemId();
                     for(int i = 0; i < bottomNavigationView.getMenu().size(); i++){
                         MenuItem menuItem = bottomNavigationView.getMenu().getItem(i);
@@ -155,17 +182,20 @@ public class MainActivity extends AppCompatActivity {
                     switch (item.getItemId()){
                         case R.id.nav_noticias:
                             selectedFragment = new CommunityFragment();
+                            selected = "home";
                             break;
                         case R.id.nav_discusion:
                             selectedFragment = new DiscusionFragment();
+                            selected = "discusion";
                             break;
                         case R.id.nav_community:
                             selectedFragment = new HomeFragment();
+                            selected = "community";
                             break;
                     }
 
                     if(selectedFragment != null){
-                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,selectedFragment).commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,selectedFragment, selected).commit();
                     }
 
                     return true;
