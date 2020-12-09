@@ -23,13 +23,13 @@
                 android:layout_height="wrap_content"
                 android:paddingVertical="5dp"
                 android:id="@+id/toolbar_content">
-                <androidx.appcompat.widget.SearchView
+                <!--<androidx.appcompat.widget.SearchView
                     android:id="@+id/top_search"
                     android:layout_width="150dp"
                     android:layout_marginStart="0dp"
                     android:layout_height="wrap_content"
                     android:background="@color/transparent"
-                    android:gravity="start"/>
+                    android:gravity="start"/>-->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

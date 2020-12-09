@@ -40,6 +40,7 @@ public class CommunityFragment extends Fragment {
     private List<String> followingList;
     AVLTree avl;
     String filtrar;
+    String valor;
 
     public List<Post> getPostList() {
         return postList;
@@ -63,6 +64,7 @@ public class CommunityFragment extends Fragment {
 
         SharedPreferences comprobarFiltro = getActivity().getSharedPreferences("FILTROS", Context.MODE_PRIVATE);
         String filtro = comprobarFiltro.getString("aplicar", "none");
+        valor = comprobarFiltro.getString("valor", "none");
 
         filtrar = "none";
         if(!filtro.equals("none")){

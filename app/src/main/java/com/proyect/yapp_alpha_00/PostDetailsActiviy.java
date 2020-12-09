@@ -250,8 +250,6 @@ public class PostDetailsActiviy extends AppCompatActivity {
                 while (!postStack.isEmpty()){
                     postStack.pop();
                 }
-                Log.w("ESTADO", "COMPROBAR OFICIAL");
-                Log.w("ESTADO", String.valueOf(oficial));
                 if(oficial) {
                     for (DataSnapshot datasnapshot : snapshot.getChildren()) {
                         if (datasnapshot.child("publicador oficial").exists()) {

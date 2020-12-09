@@ -39,7 +39,6 @@ import com.proyect.yapp_alpha_00.Model.User;
 
 public class MainActivity extends AppCompatActivity {
 
-    SearchView buscar;
     ActionBarDrawerToggle actionBarDrawerToggle;
     DrawerLayout drawerLayout;
     NavigationView navigationView;
@@ -140,7 +139,6 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        buscar = findViewById(R.id.top_search);
         filtro = findViewById(R.id.filtro);
 
         filtro.setOnClickListener(new View.OnClickListener() {

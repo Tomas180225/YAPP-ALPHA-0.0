@@ -166,7 +166,7 @@ public class AVLTree{
 
     public void Find(Nodo nodo, String palabra) {
         if (nodo != null) {
-            if(nodo.data2.equals(palabra)){
+            if(nodo.data2.contains(palabra)){
                 listPosts.add(nodo.data);
                 if(nodo.right != null){
                     Find(nodo.right, palabra);
